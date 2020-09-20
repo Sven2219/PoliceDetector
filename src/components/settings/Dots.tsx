@@ -6,15 +6,15 @@ interface IProps {
     scrollX: Animated.Value;
     mapMode: IMapMode[];
 }
-
 const Dots = ({ scrollX, mapMode }: IProps) => {
     const translateX = scrollX.interpolate({
         inputRange: [-IMAGE_WIDTH, 0, IMAGE_WIDTH],
         outputRange: [-DOT_SIZE, 0, DOT_SIZE]
     })
-    return (<View style={{ flexDirection: 'row' }}>
+    return (
+    <View style={{ flexDirection: 'row' }}>
         <Animated.View style={[styles.paginationIndicator, { transform: [{ translateX }] }]} />
-        {mapMode.map(({ id }, index) => {
+        {mapMode.map(({ id }) => {
             return (<View style={styles.dotContainer} key={id}>
                 <View style={[styles.dotStyle]} />
             </View>)

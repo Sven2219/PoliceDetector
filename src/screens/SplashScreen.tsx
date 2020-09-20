@@ -26,7 +26,7 @@ const SplashScreen = ({ navigation }: IProps): JSX.Element => {
             firebase.initializeApp(firebaseConfig);
         }
         setTimeout(() => {
-            navigation.navigate('TabBar')
+            navigation.navigate('Detector')
         }, 3000)
     }, [])
     return (

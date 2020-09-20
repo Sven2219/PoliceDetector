@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
 import { IMapMode } from '../../helpers/interface/interfaces';
 import { IMAGE_WIDTH, IMAGE_HEIGHT, width, RIGHT_PADDING, TICKER_HEIGHT, DOT_SIZE } from '../../helpers/constants/SettingsConst';
 import Ticker from './Ticker';
 import Dots from './Dots';
-interface IProps {
-    mode: string;
-    setMode: React.Dispatch<React.SetStateAction<string>>
-}
-const AnimatedChoosingMode = ({ mode, setMode }: IProps) => {
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { SettingsContext } from '../../context/SettingsContext';
+
+const AnimatedChoosingMode = (): JSX.Element => {
+    const { settingsState, settingsDispatch } = useContext(SettingsContext);
     const [mapMode, setMapMode] = useState<IMapMode[]>([]);
     const scrollX = useRef(new Animated.Value(0)).current;
     useEffect(() => {
@@ -20,6 +20,11 @@ const AnimatedChoosingMode = ({ mode, setMode }: IProps) => {
             setMapMode(data);
         } catch (error) {
             console.log(error)
+        }
+    }
+    const handleRequest = (name: string): void => {
+        if (name !== settingsState.mode) {
+            settingsDispatch({ type: "setMode", payload: name });
         }
     }
     return (
@@ -49,7 +54,9 @@ const AnimatedChoosingMode = ({ mode, setMode }: IProps) => {
                         })
                         return (
                             <View style={styles.imageContainer}>
-                                <Animated.Image source={{ uri: item.uri }} style={[styles.imageSize, { transform: [{ scale }] }]} />
+                                <TouchableWithoutFeedback onPress={() => handleRequest(item.name)}>
+                                    <Animated.Image source={{ uri: item.uri }} style={[styles.imageSize, { transform: [{ scale }] }]} />
+                                </TouchableWithoutFeedback>
                             </View>
                         )
                     }}
