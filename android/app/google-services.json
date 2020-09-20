@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "52607038372",
+    "firebase_url": "https://policedetector-fdd85.firebaseio.com",
+    "project_id": "policedetector-fdd85",
+    "storage_bucket": "policedetector-fdd85.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52607038372:android:4bc394c2fa70f5d21b4731",
+        "android_client_info": {
+          "package_name": "com.policedetector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52607038372-a8t53vmj0ts083sg6viruoii5ker4sgb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-RFHYOaM3Y2sPVXTKWlF8QchFBN84FqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52607038372-a8t53vmj0ts083sg6viruoii5ker4sgb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
