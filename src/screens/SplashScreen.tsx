@@ -1,15 +1,17 @@
-import React,{useEffect} from 'react';
-import firebase from 'firebase';
-
-import {View,StatusBar,Image} from 'react-native';
-import {styles} from '../helpers/style/SplashScreenStyle';
-
-interface IProps{
-    navigation:any;
+import React, { useEffect } from 'react';
+import firebase from '@react-native-firebase/app';
+import {
+    NavigationParams,
+    NavigationScreenProp,
+    NavigationState,
+} from 'react-navigation';
+import { View, StatusBar, Image, StyleSheet } from 'react-native';
+import { width, ITEM_HEIGHT } from '../helpers/constants/SplashScreenConst';
+interface IProps {
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
-
-const SplashScreen=({navigation}:IProps)=>{
-    useEffect(()=>{
+const SplashScreen = ({ navigation }: IProps): JSX.Element => {
+    useEffect(() => {
         const firebaseConfig = {
             apiKey: "AIzaSyBRyCWYq5ZavEbTl83Hs_95ST2Wn07fPU0",
             authDomain: "policedetector-fdd85.firebaseapp.com",
@@ -21,16 +23,29 @@ const SplashScreen=({navigation}:IProps)=>{
             measurementId: "G-K0HX4FJ65T"
         };
         if (!firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
+            firebase.initializeApp(firebaseConfig);
         }
-        setTimeout(()=>{
-           navigation.navigate('TabBar')
-        },3000)
-      },[])
-    return(
+        setTimeout(() => {
+            navigation.navigate('TabBar')
+        }, 3000)
+    }, [])
+    return (
         <View style={styles.containerStyle}>
-            <StatusBar backgroundColor="#000"/>
-            <Image style={ styles.imageStyle} source={require('../images/splashImage.jpg')}/>
+            <StatusBar backgroundColor="#000" />
+            <Image style={styles.imageStyle} source={require('../images/splashImage.jpg')} />
         </View>)
 }
+
+
+export const styles = StyleSheet.create({
+    imageStyle: {
+        width: width,
+        height: ITEM_HEIGHT,
+        marginTop: 100
+    },
+    containerStyle: {
+        backgroundColor: '#ffffff',
+        flex: 1
+    }
+})
 export default SplashScreen;
