@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AnimatedChoosingMode from '../components/settings/AnimatedChoosingMode';
+import { width } from '../helpers/constants/SplashScreenConst';
 import { IMapMode } from '../helpers/interface/interfaces';
 
 
@@ -14,6 +15,10 @@ const Settings = (): JSX.Element => {
         <View style={styles.titleContainer}>
             <Text style={styles.titleStyle}>SETTINGS</Text>
         </View>
+        <View style={{height:100,width}}>
+
+        </View>
+        
         <AnimatedChoosingMode mode={mode} setMode={setMode}/>
     </View>)
 }

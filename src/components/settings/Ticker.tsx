@@ -1,13 +1,13 @@
 import React from 'react';
 import {View,Animated,Text, StyleSheet} from 'react-native';
 import { IMapMode } from '../../helpers/interface/interfaces';
-import {TICKER_HEIGHT,width} from '../../helpers/constants/SettingsConst';
+import {TICKER_HEIGHT,IMAGE_WIDTH} from '../../helpers/constants/SettingsConst';
 interface IProps{
     scrollX:Animated.Value;
     mapMode:IMapMode[];
 }
 const Ticker=({scrollX,mapMode}:IProps)=>{
-    const inputRange = [-width,0,width];
+    const inputRange = [-IMAGE_WIDTH,0,IMAGE_WIDTH];
 
     const translateY = scrollX.interpolate({
         inputRange,
@@ -23,7 +23,7 @@ const Ticker=({scrollX,mapMode}:IProps)=>{
 }
 const styles = StyleSheet.create({
     tickerText:{
-        fontSize:30,
+        fontSize:20,
         textTransform:'uppercase',
         fontWeight:"bold"
     },

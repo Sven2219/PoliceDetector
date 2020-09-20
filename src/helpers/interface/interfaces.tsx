@@ -13,4 +13,5 @@ export interface INativePosition{
 export interface IMapMode{
     name:string;
     uri:string;
+    id:number;
 }
