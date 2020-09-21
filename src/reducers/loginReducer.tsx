@@ -5,8 +5,8 @@ export interface IState {
     passwordValidationError: string;
     confirmPassword: string;
     loginFlag: boolean;
+    confirmPasswordAnimation: boolean;
 }
-
 type setValidateEmail = {
     readonly type: "setValidateEmail";
     readonly email: string;
@@ -25,8 +25,11 @@ type setLoginFlag = {
     readonly type: "setLoginFlag";
     readonly payload: boolean;
 }
-
-export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag;
+type setConfirmPasswordAnimation = {
+    readonly type: "setConfirmPasswordAnimation";
+    readonly payload: boolean;
+}
+export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag | setConfirmPasswordAnimation;
 
 export const reducer = (state: IState, actions: Actions) => {
     switch (actions.type) {
@@ -38,6 +41,8 @@ export const reducer = (state: IState, actions: Actions) => {
             return { ...state, confirmPassword: actions.confirmPassword };
         case "setLoginFlag":
             return { ...state, loginFlag: actions.payload };
+        case "setConfirmPasswordAnimation":
+            return { ...state, confirmPasswordAnimation: actions.payload };
         default:
             return state;
     }
