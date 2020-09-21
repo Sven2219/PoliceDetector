@@ -8,7 +8,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../context/SettingsContext';
 
 const AnimatedChoosingMode = (): JSX.Element => {
-    const { settingsState, settingsDispatch } = useContext(SettingsContext);
+    const { state, dispatch } = useContext(SettingsContext);
     const [mapMode, setMapMode] = useState<IMapMode[]>([]);
     const scrollX = useRef(new Animated.Value(0)).current;
     useEffect(() => {
@@ -23,8 +23,8 @@ const AnimatedChoosingMode = (): JSX.Element => {
         }
     }
     const handleRequest = (name: string): void => {
-        if (name !== settingsState.mode) {
-            settingsDispatch({ type: "setMode", payload: name });
+        if (name !== state.mode) {
+            dispatch({ type: "setMode", payload: name });
         }
     }
     return (

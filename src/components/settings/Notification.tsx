@@ -6,12 +6,12 @@ import { SettingsContext } from '../../context/SettingsContext';
 
 
 const Notification = (): JSX.Element => {
-    const { settingsState, settingsDispatch } = useContext(SettingsContext);
+    const { state, dispatch } = useContext(SettingsContext);
     const isActive = (): string => {
-        return settingsState.notificationFlag ? "#006400" : "#000";
+        return state.notificationFlag ? "#006400" : "#000";
     }
     return (<View style={styles.mainContainer}>
-        <TouchableWithoutFeedback onPress={() => settingsDispatch({ type: "setNotificationFlag", payload: !settingsState.notificationFlag })}>
+        <TouchableWithoutFeedback onPress={() => dispatch({ type: "setNotificationFlag", payload: !state.notificationFlag })}>
             <Feather name="bell" size={50} color={isActive()} />
         </TouchableWithoutFeedback>
         <Text style={styles.textStyle}>If you want to receive alerts {'\n'}1.5km before the map detects{'\n'}a policeofficer, press the icon.</Text>

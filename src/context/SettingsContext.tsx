@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { Actions, ISettingsState } from '../reducers/settingsReducer';
+import { Actions, IState } from '../reducers/settingsReducer';
 interface IContextProps {
-    settingsDispatch: React.Dispatch<Actions>
-    settingsState: ISettingsState;
+    dispatch: React.Dispatch<Actions>
+    state: IState;
 }
 export const SettingsContext = createContext({} as IContextProps);

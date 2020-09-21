@@ -4,12 +4,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { SettingsContext } from '../../context/SettingsContext';
 
 const Autofocus = () => {
-    const { settingsState, settingsDispatch } = useContext(SettingsContext);
+    const { state, dispatch } = useContext(SettingsContext);
     const isActive = (): string => {
-        return settingsState.autofocusFlag ? "#006400" : "#000";
+        return state.autofocusFlag ? "#006400" : "#000";
     }
     return (<View style={styles.mainContainer}>
-        <MaterialCommunityIcons name="crosshairs-gps" size={50} color={isActive()} onPress={() => settingsDispatch({ type: "setAutofocusFlag", payload: !settingsState.autofocusFlag })} />
+        <MaterialCommunityIcons name="crosshairs-gps" size={50} color={isActive()} onPress={() => dispatch({ type: "setAutofocusFlag", payload: !state.autofocusFlag })} />
         <Text style={styles.textStyle}>If you want to autofocus your{'\n'}car while driving, press icon.</Text>
     </View>)
 }
