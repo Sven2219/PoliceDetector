@@ -8,10 +8,12 @@ import { IState, Actions, reducer } from '../reducers/settingsReducer';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const Settings = (): JSX.Element => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, { autofocusFlag: false, notificationFlag: false, mode: "" })
+    
+
     return (<View>
         <View style={styles.titleContainer}>
             <Text style={styles.titleStyle}>SETTINGS</Text>
-            <MaterialCommunityIcons name="update" size={40} onPress={()=>console.log("Update user options")}/>
+            <MaterialCommunityIcons name="update" size={40} onPress={() => console.log("Update user options")} />
         </View>
         <SettingsContext.Provider value={{ state, dispatch }}>
             <Notification />
