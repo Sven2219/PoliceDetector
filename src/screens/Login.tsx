@@ -12,6 +12,11 @@ import { IMAGE_WIDTH, IMAGE_HEIGHT, TEXTINPUT_WIDTH, LEFT, ICON_SIZE, width } fr
 //The goal is to create validation with regular expression not with yup/formik or something like that
 
 const Login = (): JSX.Element => {
+    const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
+        email: "", password: "", confirmPassword: "",
+        emailValidationError: "", passwordValidationError: "",
+        loginFlag: false, toggled:false
+    });
     useEffect(() => {
         Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
 
@@ -24,11 +29,6 @@ const Login = (): JSX.Element => {
       const _keyboardDidHide = () => {
         dispatch({type:"setToggled",payload:false})
       };
-    const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
-        email: "", password: "", confirmPassword: "",
-        emailValidationError: "", passwordValidationError: "",
-        loginFlag: false, confirmPasswordAnimation: false,toggled:false
-    });
     const transition = useTransition(state.toggled,{duration:1000});
     const translateY = interpolate(transition,{
         inputRange:[0,1],
@@ -61,37 +61,38 @@ const Login = (): JSX.Element => {
     }
 
     return (
-        <Animated.View style={{flex:1,transform:[{translateY}]}}>
-            <View style={styles.titleContainer}>
+        <View style={{flex:1}}>
+            <Animated.View style={[styles.titleContainer,{transform:[{translateY}]}]}>
                 <Text style={styles.titleStyle}>POLICE DETECTOR</Text>
-            </View>
-            <View style={styles.capContainer}>
+            </Animated.View>
+            <Animated.View style={[styles.capContainer,{transform:[{translateY}]}]}>
                 <Image source={require('../images/policeCap.png')} style={styles.policeCapDimensions} />
-            </View>
-            <View style={styles.reinputContainer}>
+            </Animated.View>
+            <Animated.View style={[styles.reinputContainer,{transform:[{translateY}]}]}>
                 <MaterialCommunityIcons name="email" size={ICON_SIZE} />
                 <TextInput onFocus={() => dispatch({type:"setToggled",payload:true})} value={state.email} onChangeText={(email: string) => validateEmail(email)} placeholder="sven.suk5@gmail.com" style={styles.textInputSize} />
-            </View>
-            <View style={styles.errorPosition}>
+            </Animated.View>
+            <Animated.View style={[styles.errorPosition,{transform:[{translateY}]}]}>
                 <Text style={{ fontSize: 16, color: isValid(state.emailValidationError) }}>{state.emailValidationError}</Text>
-            </View>
-            <View style={styles.reinputContainer}>
+            </Animated.View>
+            <Animated.View style={[styles.reinputContainer,{transform:[{translateY}]}]}>
                 <MaterialCommunityIcons name="account-key" size={ICON_SIZE} />
                 <TextInput onFocus={() => dispatch({type:"setToggled",payload:true})} secureTextEntry={true} value={state.password} onChangeText={(password: string) => validatePassword(password)} placeholder="***********" style={styles.textInputSize} />
-            </View>
-            <View style={styles.errorPosition}>
+            </Animated.View>
+            <Animated.View style={[styles.errorPosition,{transform:[{translateY}]}]}>
                 <Text style={{ fontSize: 16, color: isValid(state.passwordValidationError) }}>{state.passwordValidationError}</Text>
-            </View>
-            <TouchableOpacity onPress={()=>console.log("Ovo je samo test")}>
-                <Text>Ovo je samo test</Text>
-            </TouchableOpacity>
+            </Animated.View>
+            <Animated.View style={[styles.reinputContainer,{transform:[{translateY}]}]}>
+                <MaterialCommunityIcons name="account-key" size={ICON_SIZE} />
+                <TextInput onFocus={() => dispatch({type:"setToggled",payload:true})} secureTextEntry={true} value={state.confirmPassword} onChangeText={(confirmPassword: string) => dispatch({type:"setValidateConfirmPassword",payload:confirmPassword})} placeholder="***********" style={styles.textInputSize} />
+            </Animated.View>
             <View style={styles.bottomOptionContainer}>
                 <Text style={styles.bottomTextStyle}>Allready have an account?</Text>
                 <TouchableOpacity onPress={() => dispatch({ type: "setLoginFlag", payload: true })}>
                     <Text style={[styles.bottomTextStyle, { color: 'blue' }]}>Login here</Text>
                 </TouchableOpacity>
             </View>
-        </Animated.View>
+        </View>
     )
 }
 

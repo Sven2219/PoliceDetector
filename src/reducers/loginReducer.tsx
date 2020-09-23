@@ -5,7 +5,6 @@ export interface IState {
     passwordValidationError: string;
     confirmPassword: string;
     loginFlag: boolean;
-    confirmPasswordAnimation: boolean;
     toggled: boolean;
 }
 type setValidateEmail = {
@@ -20,21 +19,17 @@ type setValidatePassword = {
 }
 type setValidateConfirmPassword = {
     readonly type: "setValidateConfirmPassword";
-    readonly confirmPassword: string;
+    readonly payload: string;
 }
 type setLoginFlag = {
     readonly type: "setLoginFlag";
-    readonly payload: boolean;
-}
-type setConfirmPasswordAnimation = {
-    readonly type: "setConfirmPasswordAnimation";
     readonly payload: boolean;
 }
 type setToggled = {
     readonly type: "setToggled";
     readonly payload: boolean;
 }
-export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag | setConfirmPasswordAnimation | setToggled;
+export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag  | setToggled;
 
 export const reducer = (state: IState, actions: Actions) => {
     switch (actions.type) {
@@ -43,11 +38,9 @@ export const reducer = (state: IState, actions: Actions) => {
         case "setValidatePassword":
             return { ...state, password: actions.password, passwordValidationError: actions.passwordValidationError };
         case "setValidateConfirmPassword":
-            return { ...state, confirmPassword: actions.confirmPassword };
+            return { ...state, confirmPassword: actions.payload };
         case "setLoginFlag":
             return { ...state, loginFlag: actions.payload };
-        case "setConfirmPasswordAnimation":
-            return { ...state, confirmPasswordAnimation: actions.payload }
         case "setToggled":
             if(actions.payload===state.toggled){
                 return state;
