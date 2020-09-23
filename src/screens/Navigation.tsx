@@ -2,14 +2,12 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import SplashScreen from './SplashScreen';
 import Detector from './Detector';
 import Settings from './Settings';
-
-
+import Identification from './Identification';
 const AuthStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -19,13 +17,14 @@ const AuthStackScreen = (): JSX.Element => {
       <AuthStack.Navigator screenOptions={{ headerShown: false }}
         initialRouteName="SplashScreen">
         <AuthStack.Screen name="SplashScreen" component={SplashScreen} />
-        <AuthStack.Screen name="TabBar" component={Navigation} />
+        <AuthStack.Screen name="IdentificationScreen" component={Identification}/>
+        <AuthStack.Screen name="TabBar" component={TabBar} />
       </AuthStack.Navigator>
     </NavigationContainer>
   )
 }
 
-const Navigation = (): JSX.Element => {
+const TabBar = (): JSX.Element => {
   return (
     <Tab.Navigator
       initialRouteName="Detector"
