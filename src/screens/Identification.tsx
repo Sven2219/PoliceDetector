@@ -14,17 +14,18 @@ import SubmitButtonText from '../components/identification/SubmitBottomText';
 import auth from '@react-native-firebase/auth';
 import { NavigationParams, NavigationScreenProp } from 'react-navigation';
 import { NavigationState } from '@react-navigation/native';
+import Spinner from '../components/identification/Spinner';
 
 //The goal is to create validation with regular expression not with yup/formik or something like that
 interface IProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
-const Login = ({navigation}:IProps): JSX.Element => {
+const Login = ({ navigation }: IProps): JSX.Element => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
         email: "", password: "", confirmPassword: "",
         emailValidationError: "", passwordValidationError: "",
         loginFlag: false, toggled: false, showPassword: false,
-        showConfirmPassword: false, globalError:""
+        showConfirmPassword: false, globalError: "", spinnerFlag: false
     });
     //simple transition depend on toggle state
     //if toggle is true it will go to -100 else => 0
@@ -50,10 +51,9 @@ const Login = ({navigation}:IProps): JSX.Element => {
         dispatch({ type: "setToggled", payload: false })
     };
 
-
     //function that validate user input
     const validateEmail = (email: string): void => {
-        const validateEmail = email.match(/^\w+(.\w+)@gmail.com?/g);
+        const validateEmail = email.match(/^\w+(.\w+)@gmail.com$/g);
         validateEmail ? dispatch({ type: "setValidateEmail", email: email, emailValidationError: "Email is valid" }) :
             dispatch({ type: "setValidateEmail", email: email, emailValidationError: "Invalid email" })
     }
@@ -76,7 +76,8 @@ const Login = ({navigation}:IProps): JSX.Element => {
     }
 
     const showConfirmPassword = (): JSX.Element | null => {
-        return !state.loginFlag ?
+        return !state.loginFlag 
+            ?
             <AnimatedTextInput translateY={translateY} iconName={"account-key"}
                 onFocus={() => dispatch({ type: "setToggled", payload: true })} secureTextEntry={state.showConfirmPassword}
                 value={state.confirmPassword}
@@ -85,7 +86,8 @@ const Login = ({navigation}:IProps): JSX.Element => {
             : null;
     }
     const bottomText = (): JSX.Element => {
-        return !state.loginFlag ?
+        return !state.loginFlag
+            ?
             <BottomText firstPart={'Allready have an account?'} secondPart={'Sign in here'}
                 onPress={() => dispatch({ type: "setLoginFlag", payload: true })} marginTop={80} />
             :
@@ -94,34 +96,40 @@ const Login = ({navigation}:IProps): JSX.Element => {
     }
     //identificate user 
     //It could be in one but then I would have to implement ifs in that try catch
-    const identificate = async(): Promise<void> => {
-        if(state.loginFlag && state.emailValidationError==="Email is valid" && state.passwordValidationError==="Password is valid"){
+    const identificate = async (): Promise<void> => {
+        dispatch({ type: "setSpinnerFlag", payload: true });
+        if (state.loginFlag && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
             try {
-                await auth().signInWithEmailAndPassword(state.email,state.password);
-                dispatch({type:"clear"})
+                await auth().signInWithEmailAndPassword(state.email, state.password);
+                dispatch({ type: "clear" })
                 navigation.navigate('TabBar')
             } catch (error) {
-                dispatch({type:"setGlobalError",payload:"Email or password are incorrect"})
+                dispatch({ type: "setGlobalError", payload: "Email or password are incorrect" })
             }
         }
-        else if(!state.loginFlag && state.password===state.confirmPassword && state.emailValidationError==="Email is valid" && state.passwordValidationError==="Password is valid"){
+        else if (!state.loginFlag && state.password === state.confirmPassword && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
             try {
-                await auth().createUserWithEmailAndPassword(state.email,state.password);
-                dispatch({type:"clear"})
+                await auth().createUserWithEmailAndPassword(state.email, state.password);
+                dispatch({ type: "clear" })
                 navigation.navigate('TabBar')
             } catch (error) {
-                dispatch({type:"setGlobalError",payload:"Email is already in use"})
+                dispatch({ type: "setGlobalError", payload: "Email is already in use" })
             }
         }
-        else{
-            dispatch({type:"setGlobalError",payload:"You have not met all the conditions"})
+        else {
+            dispatch({ type: "setGlobalError", payload: "You have not met all the conditions" })
         }
     }
-    const showGlobalError=()=>{
-        if(state.globalError!==""){
-            return(<Text style={styles.globalError}>{state.globalError}</Text>)
-        }
-        return null;
+    const showGlobalError = (): JSX.Element | null => {
+        return state.globalError !== "" ? <Text style={styles.globalError}>{state.globalError}</Text> : null;
+    }
+    const showButtonOrSpinner = () => {
+        return state.spinnerFlag
+            ?
+            <View style={styles.positionCenter}><Spinner size={30} /></View>
+            :
+            <SubmitButtonText loginFlag={state.loginFlag} onPress={() => identificate()} />
+
     }
     return (
         <View style={{ flex: 1 }}>
@@ -132,7 +140,7 @@ const Login = ({navigation}:IProps): JSX.Element => {
                 <Image source={require('../images/policeCap.png')} style={styles.policeCapDimensions} />
             </Animated.View>
             <AnimatedTextInput iconName={"email"} onFocus={() => dispatch({ type: "setToggled", payload: true })} translateY={translateY}
-            secureTextEntry={true}
+                secureTextEntry={true}
                 onChangeText={(email: string) => validateEmail(email)} value={state.email} placeholder="sven.suk5@gmail.com"
             />
             <ErrorText translateY={translateY} validationError={state.emailValidationError} />
@@ -144,7 +152,7 @@ const Login = ({navigation}:IProps): JSX.Element => {
             <View style={styles.positionCenter}>
                 {showGlobalError()}
             </View>
-            <SubmitButtonText loginFlag={state.loginFlag} onPress={() => identificate()} />
+            {showButtonOrSpinner()}
             {bottomText()}
         </View>
     )
@@ -173,9 +181,10 @@ const styles = StyleSheet.create({
         height: IMAGE_HEIGHT,
         transform: [{ rotate: '55deg' }]
     },
-    globalError:{
-        fontSize:17,
-        fontFamily: 'Merriweather-Regular'
+    globalError: {
+        fontSize: 17,
+        fontFamily: 'Merriweather-Regular',
+        color: '#b22222'
     }
 })
 

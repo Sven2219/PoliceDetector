@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import firebase from '@react-native-firebase/app';
-import {
-    NavigationParams,
-    NavigationScreenProp,
-    NavigationState,
-} from 'react-navigation';
+import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import { View, StatusBar, Image, StyleSheet } from 'react-native';
 import { width, ITEM_HEIGHT } from '../helpers/constants/SplashScreenConst';
+import auth from '@react-native-firebase/auth';
 interface IProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
@@ -25,8 +22,13 @@ const SplashScreen = ({ navigation }: IProps): JSX.Element => {
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
+        //because I want to show splash screen for 3 sec
+        // I know that onAuthStateChanged is faster than that
+        //But goal is to show image for 3 sec
         setTimeout(() => {
-            navigation.navigate('Identifcation')
+            auth().onAuthStateChanged((user) => {
+                user ? navigation.navigate('TabBar') : navigation.navigate('Identifcation')
+            })
         }, 3000)
     }, [])
     return (
@@ -37,7 +39,7 @@ const SplashScreen = ({ navigation }: IProps): JSX.Element => {
 }
 
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     imageStyle: {
         width: width,
         height: ITEM_HEIGHT,

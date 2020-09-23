@@ -9,6 +9,7 @@ export interface IState {
     showPassword: boolean;
     showConfirmPassword: boolean;
     globalError: string;
+    spinnerFlag: boolean;
 }
 type setValidateEmail = {
     readonly type: "setValidateEmail";
@@ -47,7 +48,11 @@ type setGlobalError = {
     readonly type: "setGlobalError";
     readonly payload: string;
 }
-export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag | setToggled | setShowPassword | setShowConfirmPassowrd | clear | setGlobalError;
+type setSpinnerFlag = {
+    readonly type: "setSpinnerFlag";
+    readonly payload: boolean;
+}
+export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag | setToggled | setShowPassword | setShowConfirmPassowrd | clear | setGlobalError | setSpinnerFlag;
 
 export const reducer = (state: IState, actions: Actions) => {
     switch (actions.type) {
@@ -69,9 +74,11 @@ export const reducer = (state: IState, actions: Actions) => {
         case "setShowConfirmPassword":
             return { ...state, showConfirmPassword: actions.payload };
         case "clear":
-            return { ...state, email: "", password: "", confirmPassword: "", showConfirmPassword: false, showPassword: false, passwordValidationError: "", emailValidationError: "" ,globalError:""}
+            return { ...state, email: "", password: "", confirmPassword: "", showConfirmPassword: false, spinnerFlag: false, showPassword: false, passwordValidationError: "", emailValidationError: "", globalError: "" }
         case "setGlobalError":
-            return { ...state, globalError: actions.payload };
+            return { ...state, globalError: actions.payload, spinnerFlag: false };
+        case "setSpinnerFlag":
+            return { ...state, spinnerFlag: actions.payload };
         default:
             return state;
     }
