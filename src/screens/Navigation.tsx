@@ -17,7 +17,7 @@ const AuthStackScreen = (): JSX.Element => {
       <AuthStack.Navigator screenOptions={{ headerShown: false }}
         initialRouteName="SplashScreen">
         <AuthStack.Screen name="SplashScreen" component={SplashScreen} />
-        <AuthStack.Screen name="IdentificationScreen" component={Identification}/>
+        <AuthStack.Screen name="Identifcation" component={Identification}/>
         <AuthStack.Screen name="TabBar" component={TabBar} />
       </AuthStack.Navigator>
     </NavigationContainer>

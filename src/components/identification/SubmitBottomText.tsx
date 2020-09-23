@@ -3,15 +3,16 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 interface IProps {
     loginFlag: boolean;
+    onPress: () => void;
 }
 
-const SubmitButtonText = ({ loginFlag }: IProps): JSX.Element => {
+const SubmitButtonText = ({ loginFlag, onPress }: IProps): JSX.Element => {
     const submitButtonText = (): string => {
         return loginFlag ? "Sign in" : "Register";
     }
     return (
         <View style={styles.positionCenter}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => onPress()}>
                 <Text style={styles.submitText}>
                     {submitButtonText()}
                 </Text>
@@ -23,7 +24,8 @@ const styles = StyleSheet.create({
     positionCenter: {
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        top:20
     },
     submitText: {
         fontSize: 22,

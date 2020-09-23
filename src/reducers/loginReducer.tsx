@@ -8,6 +8,7 @@ export interface IState {
     toggled: boolean;
     showPassword: boolean;
     showConfirmPassword: boolean;
+    globalError: string;
 }
 type setValidateEmail = {
     readonly type: "setValidateEmail";
@@ -39,7 +40,14 @@ type setShowConfirmPassowrd = {
     readonly type: "setShowConfirmPassword";
     readonly payload: boolean;
 }
-export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag | setToggled | setShowPassword | setShowConfirmPassowrd;
+type clear = {
+    readonly type: "clear";
+}
+type setGlobalError = {
+    readonly type: "setGlobalError";
+    readonly payload: string;
+}
+export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag | setToggled | setShowPassword | setShowConfirmPassowrd | clear | setGlobalError;
 
 export const reducer = (state: IState, actions: Actions) => {
     switch (actions.type) {
@@ -60,6 +68,10 @@ export const reducer = (state: IState, actions: Actions) => {
             return { ...state, showPassword: actions.payload };
         case "setShowConfirmPassword":
             return { ...state, showConfirmPassword: actions.payload };
+        case "clear":
+            return { ...state, email: "", password: "", confirmPassword: "", showConfirmPassword: false, showPassword: false, passwordValidationError: "", emailValidationError: "" ,globalError:""}
+        case "setGlobalError":
+            return { ...state, globalError: actions.payload };
         default:
             return state;
     }

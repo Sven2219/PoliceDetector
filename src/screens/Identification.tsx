@@ -3,23 +3,31 @@ import { View, Text, StyleSheet, Image, Keyboard } from 'react-native';
 import Animated, { interpolate } from 'react-native-reanimated';
 //@ts-ignore
 import { useTransition } from 'react-native-redash/lib/module/v1';
-import firebase from '@react-native-firebase/app';
 import { reducer, Actions, IState } from '../reducers/loginReducer';
 import { IMAGE_WIDTH, IMAGE_HEIGHT } from '../helpers/constants/LoginConst';
 import BottomText from '../components/identification/BottomText';
 import AnimatedTextInput from '../components/identification/AnimatedTextInput';
 import ErrorText from '../components/identification/ErrorText'
 import SubmitButtonText from '../components/identification/SubmitBottomText';
+//when I installed package this error occurred
+//https://stackoverflow.com/questions/48249633/errorcannot-fit-requested-classes-in-a-single-dex-file-try-supplying-a-main-dex
+import auth from '@react-native-firebase/auth';
+import { NavigationParams, NavigationScreenProp } from 'react-navigation';
+import { NavigationState } from '@react-navigation/native';
 
 //The goal is to create validation with regular expression not with yup/formik or something like that
-
-const Login = (): JSX.Element => {
+interface IProps {
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
+const Login = ({navigation}:IProps): JSX.Element => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
         email: "", password: "", confirmPassword: "",
         emailValidationError: "", passwordValidationError: "",
         loginFlag: false, toggled: false, showPassword: false,
-        showConfirmPassword: false
+        showConfirmPassword: false, globalError:""
     });
+    //simple transition depend on toggle state
+    //if toggle is true it will go to -100 else => 0
     const transition = useTransition(state.toggled, { duration: 1000 });
     const translateY = interpolate(transition, {
         inputRange: [0, 1],
@@ -41,8 +49,7 @@ const Login = (): JSX.Element => {
     const _keyboardDidHide = (): void => {
         dispatch({ type: "setToggled", payload: false })
     };
-    //simple transition depend on toggle state
-    //if toggle is true it will go to -100 else => 0
+
 
     //function that validate user input
     const validateEmail = (email: string): void => {
@@ -85,6 +92,37 @@ const Login = (): JSX.Element => {
             <BottomText firstPart={'Dont have an account?'} secondPart={'Register here'}
                 onPress={() => dispatch({ type: "setLoginFlag", payload: false })} marginTop={155} />
     }
+    //identificate user 
+    //It could be in one but then I would have to implement ifs in that try catch
+    const identificate = async(): Promise<void> => {
+        if(state.loginFlag && state.emailValidationError==="Email is valid" && state.passwordValidationError==="Password is valid"){
+            try {
+                await auth().signInWithEmailAndPassword(state.email,state.password);
+                dispatch({type:"clear"})
+                navigation.navigate('TabBar')
+            } catch (error) {
+                dispatch({type:"setGlobalError",payload:"Email or password are incorrect"})
+            }
+        }
+        else if(!state.loginFlag && state.password===state.confirmPassword && state.emailValidationError==="Email is valid" && state.passwordValidationError==="Password is valid"){
+            try {
+                await auth().createUserWithEmailAndPassword(state.email,state.password);
+                dispatch({type:"clear"})
+                navigation.navigate('TabBar')
+            } catch (error) {
+                dispatch({type:"setGlobalError",payload:"Email is already in use"})
+            }
+        }
+        else{
+            dispatch({type:"setGlobalError",payload:"You have not met all the conditions"})
+        }
+    }
+    const showGlobalError=()=>{
+        if(state.globalError!==""){
+            return(<Text style={styles.globalError}>{state.globalError}</Text>)
+        }
+        return null;
+    }
     return (
         <View style={{ flex: 1 }}>
             <Animated.View style={[styles.titleContainer, styles.positionCenter, { transform: [{ translateY }] }]}>
@@ -94,6 +132,7 @@ const Login = (): JSX.Element => {
                 <Image source={require('../images/policeCap.png')} style={styles.policeCapDimensions} />
             </Animated.View>
             <AnimatedTextInput iconName={"email"} onFocus={() => dispatch({ type: "setToggled", payload: true })} translateY={translateY}
+            secureTextEntry={true}
                 onChangeText={(email: string) => validateEmail(email)} value={state.email} placeholder="sven.suk5@gmail.com"
             />
             <ErrorText translateY={translateY} validationError={state.emailValidationError} />
@@ -102,7 +141,10 @@ const Login = (): JSX.Element => {
                 placeholder="***********" onPress={() => dispatch({ type: "setShowPassword", payload: !state.showPassword })} />
             <ErrorText translateY={translateY} validationError={state.passwordValidationError} />
             {showConfirmPassword()}
-            <SubmitButtonText loginFlag={state.loginFlag} />
+            <View style={styles.positionCenter}>
+                {showGlobalError()}
+            </View>
+            <SubmitButtonText loginFlag={state.loginFlag} onPress={() => identificate()} />
             {bottomText()}
         </View>
     )
@@ -113,7 +155,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-
     },
     titleContainer: {
         height: 125,
@@ -132,6 +173,10 @@ const styles = StyleSheet.create({
         height: IMAGE_HEIGHT,
         transform: [{ rotate: '55deg' }]
     },
+    globalError:{
+        fontSize:17,
+        fontFamily: 'Merriweather-Regular'
+    }
 })
 
 export default Login;
