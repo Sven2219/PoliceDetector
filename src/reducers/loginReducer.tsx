@@ -6,6 +6,8 @@ export interface IState {
     confirmPassword: string;
     loginFlag: boolean;
     toggled: boolean;
+    showPassword: boolean;
+    showConfirmPassword: boolean;
 }
 type setValidateEmail = {
     readonly type: "setValidateEmail";
@@ -29,7 +31,15 @@ type setToggled = {
     readonly type: "setToggled";
     readonly payload: boolean;
 }
-export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag  | setToggled;
+type setShowPassword = {
+    readonly type: "setShowPassword";
+    readonly payload: boolean;
+}
+type setShowConfirmPassowrd = {
+    readonly type: "setShowConfirmPassword";
+    readonly payload: boolean;
+}
+export type Actions = setValidateEmail | setValidatePassword | setValidateConfirmPassword | setLoginFlag | setToggled | setShowPassword | setShowConfirmPassowrd;
 
 export const reducer = (state: IState, actions: Actions) => {
     switch (actions.type) {
@@ -40,12 +50,16 @@ export const reducer = (state: IState, actions: Actions) => {
         case "setValidateConfirmPassword":
             return { ...state, confirmPassword: actions.payload };
         case "setLoginFlag":
-            return { ...state, loginFlag: actions.payload };
+            return { ...state, loginFlag: actions.payload, email: "", password: "", confirmPassword: "", showConfirmPassword: false, showPassword: false };
         case "setToggled":
-            if(actions.payload===state.toggled){
+            if (actions.payload === state.toggled) {
                 return state;
             }
-            return{...state,toggled:actions.payload};
+            return { ...state, toggled: actions.payload };
+        case "setShowPassword":
+            return { ...state, showPassword: actions.payload };
+        case "setShowConfirmPassword":
+            return { ...state, showConfirmPassword: actions.payload };
         default:
             return state;
     }
