@@ -1,5 +1,5 @@
 import { Dimensions } from "react-native";
-const {width,height} = Dimensions.get("window");
+export const {width,height} = Dimensions.get("window");
 
 export const IMAGE_WIDTH = 75;
 export const IMAGE_HEIGHT = 75;
