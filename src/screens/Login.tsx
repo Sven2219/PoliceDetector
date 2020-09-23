@@ -18,14 +18,17 @@ const Login = (): JSX.Element => {
         loginFlag: false, toggled:false
     });
     useEffect(() => {
+        Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
         Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
-
         // cleanup function
         return () => {
+        Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
           Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
         };
       }, []);
-
+      const _keyboardDidShow=()=>{
+        dispatch({type:"setToggled",payload:true})
+      }
       const _keyboardDidHide = () => {
         dispatch({type:"setToggled",payload:false})
       };
@@ -59,7 +62,6 @@ const Login = (): JSX.Element => {
     const isValid = (valid: string): string => {
         return valid.match(/(?=valid$)/g) ? "green" : "#b22222";
     }
-
     return (
         <View style={{flex:1}}>
             <Animated.View style={[styles.titleContainer,{transform:[{translateY}]}]}>
