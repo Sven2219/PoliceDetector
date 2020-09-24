@@ -27,7 +27,7 @@ const SplashScreen = ({ navigation }: IProps): JSX.Element => {
         //But goal is to show image for 3 sec
         setTimeout(() => {
             auth().onAuthStateChanged((user) => {
-                user ? navigation.navigate('TabBar') : navigation.navigate('Identifcation')
+                user?.email ? navigation.navigate('TabBar') : navigation.navigate('Identifcation')
             })
         }, 3000)
     }, [])
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         marginTop: 100
     },
     containerStyle: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fff',
         flex: 1
     }
 })

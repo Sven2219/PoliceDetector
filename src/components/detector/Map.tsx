@@ -11,19 +11,19 @@ import AddPolicemanButton from './AddPolicemanButton';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import { checkMode } from '../../helpers/map/functions';
-import FullScreen from './FullScreen';
 const Map = (): JSX.Element => {
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
   const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
     showMarker: false, markerPosition: { latitude: 0, longitude: 0 },
-    settings: { notificationFlag: false, autofocusFlag: false, mode: "classic" }, fullScreen: false
+    settings: { notificationFlag: false, autofocusFlag: false, mode: "classic" }
   });
   //this things should render only once when app starts..
   useEffect(() => {
     checkUserSettings();
     findMyLocation();
   }, [])
+  //opening full screen
   const checkUserSettings = () => {
     //we use here on because when user change map mode or settings it will automaticly change
     //because when we use on it listen on that port all the time
@@ -53,7 +53,7 @@ const Map = (): JSX.Element => {
   }
   return (
     <View style={styles.container}>
-      <FullScreen onPress={()=>dispatch({type:"setFullScreen",payload:!state.fullScreen})}/>
+      
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -75,7 +75,7 @@ const Map = (): JSX.Element => {
         showMarker={state.showMarker} />
       </MapView>
       <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : saveLocationOfPoliceman() }}
-        showMarker={state.showMarker} fullScreen={state.fullScreen}
+        showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
         mode={state.settings.mode}
       />
     </View>)

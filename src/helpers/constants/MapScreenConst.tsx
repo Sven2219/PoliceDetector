@@ -4,7 +4,7 @@ export const { width, height } = Dimensions.get("window");
 //button constants
 export const ADD_POLICEMAN_BUTTON_HEIGHT = 40;
 export const BUTTON_BOTTOM_NOT_FULL_SCREEN = 80;
-export const BUTTON_BOTTOM_FULL_SCREEN = 60;
+export const BUTTON_BOTTOM_FULL_SCREEN = 40;
 
 
 //map

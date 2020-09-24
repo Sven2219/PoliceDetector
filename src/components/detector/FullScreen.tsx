@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { DetectorDispatchContext } from '../../context/detector/DispatchContext';
+import { DetectorStateContext } from '../../context/detector/StateContext';
 import { ICON_SIZE } from '../../helpers/constants/MapScreenConst';
 
-interface IProps {
-    onPress: () => void;
-}
-
-const FullScreen = ({ onPress }: IProps) => {
+const FullScreen = () => {
+    const {dDispatch} = useContext(DetectorDispatchContext);
+    const {dState} = useContext(DetectorStateContext);
     return (
         <View style={styles.iconPosition}>
-            <MaterialCommunityIcons name="fullscreen" size={ICON_SIZE} onPress={() => onPress()} color={"#fff"}/>
+            <MaterialCommunityIcons name="fullscreen" size={ICON_SIZE} onPress={() => dDispatch({type:"setFullScreenFlag",payload:!dState.fullScreenFlag})} color={"#fff"}/>
         </View>
     )
 }

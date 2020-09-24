@@ -1,17 +1,25 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { View } from 'react-native';
+import FullScreen from '../components/detector/FullScreen';
 import Map from '../components/detector/Map';
 import { DetectorDispatchContext } from '../context/detector/DispatchContext';
 import { DetectorStateContext } from '../context/detector/StateContext';
 import { Actions, IState, reducer } from '../reducers/detectorReducer';
-const Detector = () => {
+interface IProps {
+    navigation: any;
+}
+const Detector = ({ navigation }: IProps) => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
-        myPosition: { latitude: 0, longitude: 0 }
+        myPosition: { latitude: 0, longitude: 0 },fullScreenFlag:false
     })
+    useEffect(() => {
+        navigation.setOptions({ tabBarVisible: !state.fullScreenFlag })
+    }, [state.fullScreenFlag])
     return (
-        <View>
-            <DetectorDispatchContext.Provider value={{dDispatch:dispatch}}>
-                <DetectorStateContext.Provider value={{dState:state}}>
+        <View style={{flex:1}}>
+            <DetectorDispatchContext.Provider value={{ dDispatch: dispatch }}>
+                <DetectorStateContext.Provider value={{ dState: state }}>
+                    <FullScreen />
                     <Map />
                 </DetectorStateContext.Provider>
             </DetectorDispatchContext.Provider>
