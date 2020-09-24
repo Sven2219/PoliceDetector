@@ -25,7 +25,6 @@ const AddNewMarker=({showMarker,onDragEnd}:IProps):JSX.Element|null=>{
             </Marker>)
     }
     return null;
-
 }
 
 export default AddNewMarker;
