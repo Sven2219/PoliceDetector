@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 import AnimatedChoosingMode from '../components/settings/AnimatedChoosingMode';
 import Autofocus from '../components/settings/Autofocus';
 import Notification from '../components/settings/Notification';
-import { SettingsContext } from '../context/SettingsContext';
 import { IState, Actions, reducer } from '../reducers/settingsReducer';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -36,11 +35,13 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             <Text style={styles.titleStyle}>SETTINGS</Text>
             <MaterialCommunityIcons name="logout" size={ICON_SIZE} onPress={() => logOut()} />
         </View>
-        <SettingsContext.Provider value={{ state, dispatch }}>
-            <Notification />
-            <AnimatedChoosingMode />
-            <Autofocus />
-        </SettingsContext.Provider>
+
+
+        <Notification notificationFlag={state.notificationFlag} onPress={()=>dispatch({ type: "setNotificationFlag", payload: !state.notificationFlag })}/>
+        <AnimatedChoosingMode mode={state.mode} setMode={(name)=>dispatch({ type: "setMode", payload: name })}/>
+        <Autofocus autofocusFlag={state.autofocusFlag} onPress={()=>dispatch({ type: "setAutofocusFlag", payload: !state.autofocusFlag })}/>
+        
+        
         <View style={[styles.positionCenter, styles.updateButtonPosition]}>
             <TouchableWithoutFeedback onPress={() => updateUserOptions()}>
                 <Text style={styles.updateText}>UPDATE</Text>

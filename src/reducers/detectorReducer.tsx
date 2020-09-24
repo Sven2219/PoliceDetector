@@ -1,26 +1,19 @@
-import { INativePosition } from "../helpers/interface/interfaces";
+import { IPosition } from "../helpers/interface/interfaces";
 
-export interface IState{
-    myPosition:INativePosition;
-    fullScreenFlag:boolean;
+export interface IState {
+    myPosition: IPosition;
 }
 
-type setMyPosition={
-    readonly type:"setMyPostion";
-    readonly payload:INativePosition;
+type setMyPosition = {
+    readonly type: "setMyPostion";
+    readonly payload: IPosition;
 }
-type setFullScreenFlag={
-    readonly type:"setFullScreenFlag";
-    readonly payload:boolean;
-}
-export type Actions=setMyPosition|setFullScreenFlag;
+export type Actions = setMyPosition
 
-export const reducer=(state:IState,actions:Actions):IState=>{
-    switch(actions.type){
+export const reducer = (state: IState, actions: Actions): IState => {
+    switch (actions.type) {
         case "setMyPostion":
-            return{...state,myPosition:actions.payload};
-        case "setFullScreenFlag":
-            return{...state,fullScreenFlag:actions.payload};
+            return { ...state, myPosition: actions.payload };
         default:
             return state;
     }

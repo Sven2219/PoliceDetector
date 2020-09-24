@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { SettingsContext } from '../../context/SettingsContext';
-
-const Autofocus = () => {
-    const { state, dispatch } = useContext(SettingsContext);
+interface IProps{
+    autofocusFlag:boolean;
+    onPress:()=>void;
+}
+const Autofocus = ({autofocusFlag,onPress}:IProps) => {
     const isActive = (): string => {
-        return state.autofocusFlag ? "#006400" : "#000";
+        return autofocusFlag ? "#006400" : "#000";
     }
     return (<View style={styles.mainContainer}>
-        <MaterialCommunityIcons name="crosshairs-gps" size={50} color={isActive()} onPress={() => dispatch({ type: "setAutofocusFlag", payload: !state.autofocusFlag })} />
+        <MaterialCommunityIcons name="crosshairs-gps" size={50} color={isActive()} onPress={() => onPress()} />
         <Text style={styles.textStyle}>If you want to autofocus your{'\n'}car while driving, press icon.</Text>
     </View>)
 }

@@ -5,10 +5,13 @@ import { IMAGE_WIDTH, IMAGE_HEIGHT, width, RIGHT_PADDING, TICKER_HEIGHT, DOT_SIZ
 import Ticker from './Ticker';
 import Dots from './Dots';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { SettingsContext } from '../../context/SettingsContext';
 
-const AnimatedChoosingMode = (): JSX.Element => {
-    const { state, dispatch } = useContext(SettingsContext);
+interface IProps{
+    mode:string;
+    setMode:(name:string)=>void;
+}
+
+const AnimatedChoosingMode = ({mode,setMode}:IProps): JSX.Element => {
     const [mapMode, setMapMode] = useState<IMapMode[]>([]);
     const scrollX = useRef(new Animated.Value(0)).current;
     useEffect(() => {
@@ -23,14 +26,14 @@ const AnimatedChoosingMode = (): JSX.Element => {
         }
     }
     const handleRequest = (name: string): void => {
-        if (name !== state.mode) {
-            dispatch({ type: "setMode", payload: name });
+        if (name !== mode) {
+            setMode(name)
         }
     }
     return (
         <View>
             <View style={styles.tickerContainer}>
-                <Ticker scrollX={scrollX} mapMode={mapMode} mode={state.mode}/>
+                <Ticker scrollX={scrollX} mapMode={mapMode} mode={mode}/>
             </View>
             <View style={{ padding: RIGHT_PADDING / 2 }}>
                 <Animated.FlatList
