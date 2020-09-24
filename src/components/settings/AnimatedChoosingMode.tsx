@@ -30,7 +30,7 @@ const AnimatedChoosingMode = (): JSX.Element => {
     return (
         <View>
             <View style={styles.tickerContainer}>
-                <Ticker scrollX={scrollX} mapMode={mapMode} />
+                <Ticker scrollX={scrollX} mapMode={mapMode} mode={state.mode}/>
             </View>
             <View style={{ padding: RIGHT_PADDING / 2 }}>
                 <Animated.FlatList

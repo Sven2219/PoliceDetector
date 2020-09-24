@@ -63,7 +63,7 @@ export const reducer = (state: IState, actions: Actions) => {
         case "setValidateConfirmPassword":
             return { ...state, confirmPassword: actions.payload };
         case "setLoginFlag":
-            return { ...state, loginFlag: actions.payload, email: "", password: "", confirmPassword: "", showConfirmPassword: false, showPassword: false };
+            return { ...state, loginFlag: actions.payload, email: "", password: "", confirmPassword: "", showConfirmPassword: false, showPassword: false, globalError: "" };
         case "setToggled":
             if (actions.payload === state.toggled) {
                 return state;

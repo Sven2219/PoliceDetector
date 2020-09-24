@@ -1,4 +1,4 @@
-export const nightMode=[
+export const night=[
     {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
     {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
     {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
@@ -78,7 +78,7 @@ export const nightMode=[
       stylers: [{color: '#17263c'}]
     }
 ]
-export const retroMode=[
+export const retro=[
     {elementType: 'geometry', stylers: [{color: '#ebe3cd'}]},
     {elementType: 'labels.text.fill', stylers: [{color: '#523735'}]},
     {elementType: 'labels.text.stroke', stylers: [{color: '#f5f1e6'}]},
@@ -188,8 +188,8 @@ export const retroMode=[
       stylers: [{color: '#92998d'}]
     }
   ]
-export const normalMode=[];
-export const silverMode=[
+export const classic=[];
+export const silver=[
   {
     "elementType": "geometry",
     "stylers": [
@@ -383,7 +383,7 @@ export const silverMode=[
     ]
   }
 ]
-export const darkMode=[
+export const dark=[
   {
     "elementType": "geometry",
     "stylers": [

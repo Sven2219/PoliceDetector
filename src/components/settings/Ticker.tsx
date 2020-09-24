@@ -5,8 +5,10 @@ import { TICKER_HEIGHT, IMAGE_WIDTH } from '../../helpers/constants/SettingsCons
 interface IProps {
     scrollX: Animated.Value;
     mapMode: IMapMode[];
+    mode: string;
 }
-const Ticker = ({ scrollX, mapMode }: IProps) => {
+const Ticker = ({ scrollX, mapMode, mode }: IProps) => {
+
     const inputRange = [-IMAGE_WIDTH, 0, IMAGE_WIDTH];
     const translateY = scrollX.interpolate({
         inputRange,
@@ -15,7 +17,7 @@ const Ticker = ({ scrollX, mapMode }: IProps) => {
     return (<View style={styles.tickerContainer}>
         <Animated.View style={{ transform: [{ translateY }] }}>
             {mapMode.map(({ name }, index) => {
-                return (<Text key={index} style={styles.tickerText}>{name}</Text>)
+                return (<Text key={index} style={[styles.tickerText,{color:name===mode?"#228b22":"#000"}]}>{name}</Text>)
             })}
         </Animated.View>
     </View>)

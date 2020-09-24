@@ -12,8 +12,8 @@ import SubmitButtonText from '../components/identification/SubmitBottomText';
 //when I installed package this error occurred
 //https://stackoverflow.com/questions/48249633/errorcannot-fit-requested-classes-in-a-single-dex-file-try-supplying-a-main-dex
 import auth from '@react-native-firebase/auth';
-import { NavigationParams, NavigationScreenProp } from 'react-navigation';
-import { NavigationState } from '@react-navigation/native';
+import database from '@react-native-firebase/database';
+import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import Spinner from '../components/identification/Spinner';
 
 //The goal is to create validation with regular expression not with yup/formik or something like that
@@ -101,6 +101,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         if (state.loginFlag && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
             try {
                 await auth().signInWithEmailAndPassword(state.email, state.password);
+
                 dispatch({ type: "clear" })
                 navigation.navigate('TabBar')
             } catch (error) {
@@ -109,7 +110,12 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         }
         else if (!state.loginFlag && state.password === state.confirmPassword && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
             try {
-                await auth().createUserWithEmailAndPassword(state.email, state.password);
+                await auth().createUserWithEmailAndPassword(state.email, state.password);    
+                await database().ref('Users/'+auth().currentUser?.uid).set({
+                    autofocusFlag:false,
+                    notificationFlag:false,
+                    mode:"classic"
+                })
                 dispatch({ type: "clear" })
                 navigation.navigate('TabBar')
             } catch (error) {
