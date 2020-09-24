@@ -19,7 +19,11 @@ type setSettings = {
     readonly type: "setSettings";
     readonly payload: ISettings;
 }
-export type Actions = setShowMarker | setMarkerPosition | setSettings;
+type setFullScreen = {
+    readonly type: "setFullScreen";
+    readonly payload: boolean;
+}
+export type Actions = setShowMarker | setMarkerPosition | setSettings | setFullScreen;
 
 export const reducer = (state: IState, actions: Actions): IState => {
     switch (actions.type) {
@@ -29,6 +33,8 @@ export const reducer = (state: IState, actions: Actions): IState => {
             return { ...state, showMarker: actions.payload };
         case "setSettings":
             return { ...state, settings: actions.payload };
+        case "setFullScreen":
+            return { ...state, fullScreen: actions.payload };
         default:
             return state;
     }

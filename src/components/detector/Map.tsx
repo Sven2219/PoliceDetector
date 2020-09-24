@@ -10,8 +10,8 @@ import { IState, Actions, reducer } from '../../reducers/mapReducer';
 import AddPolicemanButton from './AddPolicemanButton';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import { ISettings } from '../../helpers/interface/interfaces';
 import { checkMode } from '../../helpers/map/functions';
+import FullScreen from './FullScreen';
 const Map = (): JSX.Element => {
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
@@ -31,10 +31,12 @@ const Map = (): JSX.Element => {
     //snap:any because when i set type ISettings it doesn't work
     //it saves value but I cannot read specific value like .mode...
     database().ref('Users/' + auth().currentUser?.uid).on('value', (snap: any) => {
-      dispatch({ type: "setSettings", payload: snap.val() })
+      const result = snap.val();
+      if(result){
+        dispatch({ type: "setSettings", payload: snap.val() })
+      }
     })
   }
-
   const findMyLocation = async (): Promise<void> => {
     try {
       const result = await GetLocation.getCurrentPosition({
@@ -47,10 +49,11 @@ const Map = (): JSX.Element => {
     }
   }
   const saveLocationOfPoliceman = () => {
-    console.log("tu smo")
+    
   }
   return (
     <View style={styles.container}>
+      <FullScreen onPress={()=>dispatch({type:"setFullScreen",payload:!state.fullScreen})}/>
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -68,8 +71,8 @@ const Map = (): JSX.Element => {
           longitudeDelta: LONGITUDE_DELTA
         }}
       >
-        <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
-          showMarker={state.showMarker} />
+      <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
+        showMarker={state.showMarker} />
       </MapView>
       <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : saveLocationOfPoliceman() }}
         showMarker={state.showMarker} fullScreen={state.fullScreen}
