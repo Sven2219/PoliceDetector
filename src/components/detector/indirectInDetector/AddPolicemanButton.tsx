@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { ADD_POLICEMAN_BUTTON_HEIGHT, BUTTON_BOTTOM_FULL_SCREEN, BUTTON_BOTTOM_NOT_FULL_SCREEN, width } from '../../helpers/constants/MapScreenConst';
-import { checkColor } from '../../helpers/map/functions';
+import { ADD_POLICEMAN_BUTTON_HEIGHT, BUTTON_BOTTOM_FULL_SCREEN, BUTTON_BOTTOM_NOT_FULL_SCREEN, width } from '../../../helpers/constants/MapScreenConst';
+import { checkColor } from '../../../helpers/map/functions';
 
 interface IProps {
     onPress: () => void;

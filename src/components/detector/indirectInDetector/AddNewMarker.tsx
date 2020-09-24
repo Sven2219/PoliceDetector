@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import {MapEvent, Marker} from 'react-native-maps'
-import { DetectorStateContext } from '../../context/detector/StateContext';
-import { IPosition } from '../../helpers/interface/interfaces';
+import { DetectorStateContext } from '../../../context/detector/StateContext';
+import { IPosition } from '../../../helpers/interface/interfaces';
 import Policeman from './Policeman';
 interface IProps{
     showMarker:boolean;

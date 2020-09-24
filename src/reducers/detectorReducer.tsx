@@ -1,8 +1,9 @@
-import { IPosition } from "../helpers/interface/interfaces";
+import { IPosition, ISettings } from "../helpers/interface/interfaces";
 
 export interface IState {
     myPosition: IPosition;
     fullScreenFlag: boolean;
+    settings: ISettings;
 }
 
 type setMyPosition = {
@@ -13,7 +14,11 @@ type setFullScreenFlag = {
     readonly type: "setFullScreenFlag";
     readonly payload: boolean;
 }
-export type Actions = setMyPosition | setFullScreenFlag
+type setSettings = {
+    readonly type: "setSettings";
+    readonly payload: ISettings;
+}
+export type Actions = setMyPosition | setFullScreenFlag | setSettings;
 
 export const reducer = (state: IState, actions: Actions): IState => {
     switch (actions.type) {
@@ -21,6 +26,8 @@ export const reducer = (state: IState, actions: Actions): IState => {
             return { ...state, myPosition: actions.payload };
         case "setFullScreenFlag":
             return { ...state, fullScreenFlag: actions.payload };
+        case "setSettings":
+            return { ...state, settings: actions.payload };
         default:
             return state;
     }

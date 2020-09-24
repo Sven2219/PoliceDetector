@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { View } from 'react-native';
-import FullScreen from '../components/detector/FullScreen';
-import Map from '../components/detector/Map';
+import FullScreen from '../components/detector/directInDetector/FullScreen';
+import Map from '../components/detector/directInDetector/Map';
 import { DetectorDispatchContext } from '../context/detector/DispatchContext';
 import { DetectorStateContext } from '../context/detector/StateContext';
 import { Actions, IState, reducer } from '../reducers/detectorReducer';
@@ -10,7 +10,7 @@ interface IProps {
 }
 const Detector = ({ navigation }: IProps) => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
-        myPosition: { latitude: 0, longitude: 0 },fullScreenFlag:false
+        myPosition: { latitude: 0, longitude: 0 },fullScreenFlag:false,settings:{notificationFlag:false,autofocusFlag:false,mode:"classic"}
     })
     useEffect(() => {
         navigation.setOptions({ tabBarVisible: !state.fullScreenFlag })

@@ -1,22 +1,21 @@
 import React, { useContext, useEffect, useReducer } from 'react';
 import MapView, { MapEvent, PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, View } from 'react-native';
-import { width, height, LATITUDE_DELTA, LONGITUDE_DELTA } from '../../helpers/constants/MapScreenConst';
-import { DetectorStateContext } from '../../context/detector/StateContext';
-import { DetectorDispatchContext } from '../../context/detector/DispatchContext';
+import { Alert, StyleSheet, View } from 'react-native';
+import { width, height, LATITUDE_DELTA, LONGITUDE_DELTA } from '../../../helpers/constants/MapScreenConst';
+import { DetectorStateContext } from '../../../context/detector/StateContext';
+import { DetectorDispatchContext } from '../../../context/detector/DispatchContext';
 import GetLocation from 'react-native-get-location';
-import AddNewMarker from './AddNewMarker';
-import { IState, Actions, reducer } from '../../reducers/mapReducer';
-import AddPolicemanButton from './AddPolicemanButton';
+import AddNewMarker from '../indirectInDetector/AddNewMarker';
+import { IState, Actions, reducer } from '../../../reducers/mapReducer';
+import AddPolicemanButton from '../indirectInDetector/AddPolicemanButton';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import { checkMode } from '../../helpers/map/functions';
+import { checkMode, preciseDistance } from '../../../helpers/map/functions';
 const Map = (): JSX.Element => {
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
   const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
     showMarker: false, markerPosition: { latitude: 0, longitude: 0 },
-    settings: { notificationFlag: false, autofocusFlag: false, mode: "classic" }
   });
   //this things should render only once when app starts..
   useEffect(() => {
@@ -33,7 +32,7 @@ const Map = (): JSX.Element => {
     database().ref('Users/' + auth().currentUser?.uid).on('value', (snap: any) => {
       const result = snap.val();
       if(result){
-        dispatch({ type: "setSettings", payload: snap.val() })
+        dDispatch({ type: "setSettings", payload: snap.val() })
       }
     })
   }
@@ -49,7 +48,20 @@ const Map = (): JSX.Element => {
     }
   }
   const saveLocationOfPoliceman = () => {
-    
+    if(preciseDistance(state.markerPosition,dState.myPosition)<=3000){
+      const date:Date = new Date();
+      database().ref('Policeman').push({
+        latitude:state.markerPosition.latitude,
+        longitude:state.markerPosition.longitude,
+        date:{
+          minutes:date.getMinutes(),
+          hours:date.getHours(),
+        }
+      })
+    }
+    else{
+      Alert.alert("Request refused","You can only post a police officer within a 3-mile radius");
+    }
   }
   return (
     <View style={styles.container}>
@@ -57,7 +69,7 @@ const Map = (): JSX.Element => {
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        customMapStyle={checkMode(state.settings.mode)}
+        customMapStyle={checkMode(dState.settings.mode)}
         zoomEnabled={true}
         showsBuildings={false}
         showsCompass={false}
@@ -76,7 +88,7 @@ const Map = (): JSX.Element => {
       </MapView>
       <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : saveLocationOfPoliceman() }}
         showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
-        mode={state.settings.mode}
+        mode={dState.settings.mode}
       />
     </View>)
 };
