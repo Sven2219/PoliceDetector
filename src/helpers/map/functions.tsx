@@ -1,5 +1,5 @@
 import { dark, classic, retro, silver, night } from '../../components/settings/mapModes/modesFromGoogle';
-import { IPosition } from '../interface/interfaces';
+import { IFirebase, IPosition } from '../interface/interfaces';
 import { getPreciseDistance } from 'geolib';
 //mode depend on state=>mode
 export const checkMode = (mode: string) => {
@@ -23,14 +23,34 @@ export const checkColor = (mode: string): string => {
 
 ////////////////////////////////////////////////////////////
 //POLICEMAN methods
-export const preciseDistance=(markerPosition:IPosition,myPosition:IPosition)=>{
-    var dis=getPreciseDistance(
+export const preciseDistance = (markerPosition: IPosition, myPosition: IPosition): number => {
+    var dis = getPreciseDistance(
         { latitude: markerPosition.latitude, longitude: markerPosition.longitude },
         { latitude: myPosition.latitude, longitude: myPosition.longitude }
     )
     return dis;
 }
 
+//complex operations
 
+export const calculatingDistance = (data: IFirebase[], myPosition: IPosition): IFirebase[] => {
+    //O(n);
+    return data.map((el)=>{
+        return ({ ...el, distance: preciseDistance({ longitude: el.longitude, latitude: el.latitude }, myPosition) })
+    })
 
-
+}
+export const sortCalculatedDistance = (res: IFirebase[]): void => {
+    //O(nLog(n))
+    res.sort((a, b): any => {
+        if (a.distance && b.distance) {
+            return a.distance - b.distance;
+        }
+    })
+}
+// is O(n) where n is end - start.
+//in my case worst scenario is O(3)
+export const nearestThree = (res: IFirebase[]): IFirebase[] => {
+    let len = res.length > 3 ? 3 : res.length;
+    return res.slice(0, len)
+}

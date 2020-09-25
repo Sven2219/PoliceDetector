@@ -1,9 +1,10 @@
-import { IPosition, ISettings } from "../helpers/interface/interfaces";
+import { IFirebase, IPosition, ISettings } from "../helpers/interface/interfaces";
 
 export interface IState {
     myPosition: IPosition;
     fullScreenFlag: boolean;
     settings: ISettings;
+    policeman: IFirebase[];
 }
 
 type setMyPosition = {
@@ -18,7 +19,11 @@ type setSettings = {
     readonly type: "setSettings";
     readonly payload: ISettings;
 }
-export type Actions = setMyPosition | setFullScreenFlag | setSettings;
+type setPoliceman = {
+    readonly type: "setPoliceman";
+    readonly payload: IFirebase[]
+}
+export type Actions = setMyPosition | setFullScreenFlag | setSettings | setPoliceman;
 
 export const reducer = (state: IState, actions: Actions): IState => {
     switch (actions.type) {
@@ -28,6 +33,8 @@ export const reducer = (state: IState, actions: Actions): IState => {
             return { ...state, fullScreenFlag: actions.payload };
         case "setSettings":
             return { ...state, settings: actions.payload };
+        case "setPoliceman":
+            return { ...state, policeman: actions.payload };
         default:
             return state;
     }

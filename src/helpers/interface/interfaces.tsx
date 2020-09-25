@@ -17,5 +17,8 @@ export interface ISettings{
 }
 
 export interface IFirebase{
-  
+  latitude:number;
+  longitude:number;
+  date:{hours:number,minutes:number}
+  distance?:number|undefined;
 }

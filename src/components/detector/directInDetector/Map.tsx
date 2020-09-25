@@ -12,8 +12,9 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 //@ts-ignore
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { checkMode, preciseDistance } from '../../../helpers/map/functions';
-import { IPosition } from '../../../helpers/interface/interfaces';
+import { calculatingDistance, checkMode, nearestThree, preciseDistance, sortCalculatedDistance } from '../../../helpers/map/functions';
+import { IFirebase, IPosition } from '../../../helpers/interface/interfaces';
+import RenderPoliceman from '../indirectInDetector/RenderPoliceman';
 const Map = (): JSX.Element => {
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
@@ -24,6 +25,7 @@ const Map = (): JSX.Element => {
   useEffect(() => {
     checkUserSettings();
     messageForLocaction();
+    showPoliceman()
   }, [])
   //opening full screen
   const checkUserSettings = () => {
@@ -60,15 +62,15 @@ const Map = (): JSX.Element => {
     }
   }
   const saveLocationOfPoliceman = () => {
-    let distance:number = 0;
-    let position:IPosition = {latitude:0,longitude:0};
-    if(state.markerPosition.latitude===0 && state.markerPosition.longitude===0){
-      distance = preciseDistance(dState.myPosition,dState.myPosition);
-      position={latitude:dState.myPosition.latitude,longitude:dState.myPosition.longitude};
+    let distance: number = 0;
+    let position: IPosition = { latitude: 0, longitude: 0 };
+    if (state.markerPosition.latitude === 0 && state.markerPosition.longitude === 0) {
+      distance = preciseDistance(dState.myPosition, dState.myPosition);
+      position = { latitude: dState.myPosition.latitude, longitude: dState.myPosition.longitude };
     }
-    else{
-      distance = preciseDistance(state.markerPosition,dState.myPosition)
-      position = {latitude:state.markerPosition.latitude,longitude:state.markerPosition.longitude}
+    else {
+      distance = preciseDistance(state.markerPosition, dState.myPosition)
+      position = { latitude: state.markerPosition.latitude, longitude: state.markerPosition.longitude }
     }
     if (distance <= 3000) {
       const date: Date = new Date();
@@ -78,16 +80,24 @@ const Map = (): JSX.Element => {
         date: {
           minutes: date.getMinutes(),
           hours: date.getHours(),
-          }
-        })
-        dispatch({type:"setMarkerPosition",payload:{latitude:0,longitude:0}})
-      }
-      else {
-        Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
-      }
+        }
+      })
+      dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 } })
+    }
+    else {
+      Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
+    }
   }
-  const showPoliceman=()=>{
-    
+  const showPoliceman = () => {
+    let data: IFirebase[] = [];
+    //complex operations...
+    database().ref('Policeman/').on('value', (snap: any) => {
+      data = Object.values(snap.val());
+      data = calculatingDistance(data, dState.myPosition);
+      sortCalculatedDistance(data);
+      data = nearestThree(data);
+      dDispatch({type:"setPoliceman",payload:data});
+    })
   }
   return (
     <View style={styles.container}>
@@ -109,6 +119,7 @@ const Map = (): JSX.Element => {
           longitudeDelta: LONGITUDE_DELTA
         }}
       >
+        <RenderPoliceman />
         <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
           showMarker={state.showMarker} />
       </MapView>
