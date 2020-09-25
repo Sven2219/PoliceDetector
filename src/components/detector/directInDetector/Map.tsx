@@ -21,18 +21,23 @@ const Map = (): JSX.Element => {
   const { dDispatch } = useContext(DetectorDispatchContext);
   const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
     showMarker: false, markerPosition: { latitude: 0, longitude: 0 },
+    policeCounter: 0
   });
   const mapRef = useRef<any>();
   useEffect(() => {
+    countPoliceman();
     checkUserSettings();
     messageForLocaction();
   }, [])
   useEffect(() => {
     //this means that user saved marker position
-    if (state.showMarker === false && state.markerPosition.latitude === 0 && state.markerPosition.longitude === 0) {
-      showPoliceman();
+    if (state.showMarker === false) {
+      getAllPoliceman();
     }
-  }, [dState.myPosition.latitude.toFixed(4) || dState.myPosition.longitude.toFixed(4) || state.showMarker])
+  }, [state.showMarker])
+  useEffect(() => {
+    findThreeNearestPoliceman();
+  }, [dState.myPosition.longitude || dState.myPosition.latitude])
   //opening full screen
   const checkUserSettings = (): void => {
     //I use on because when user change map mode or settings it will automaticly change
@@ -67,6 +72,16 @@ const Map = (): JSX.Element => {
       console.log(error)
     }
   }
+  const countPoliceman = (): void => {
+    let lastIndex: string | null = '';
+    database().ref('Policeman/').limitToLast(1).once('child_added')
+      .then((snap) => {
+        lastIndex = snap.key;
+        if (lastIndex) {
+          dispatch({ type: "setPoliceCounter", payload: parseInt(lastIndex) });
+        }
+      }).catch((error) => { console.log(error) })
+  }
   const saveLocationOfPoliceman = (): void => {
     let distance: number = 0;
     let position: IPosition = { latitude: 0, longitude: 0 };
@@ -80,7 +95,7 @@ const Map = (): JSX.Element => {
     }
     if (distance <= 3000) {
       const date: Date = new Date();
-      database().ref('Policeman').push({
+      database().ref('Policeman/' + state.policeCounter).set({
         latitude: position.latitude,
         longitude: position.longitude,
         date: {
@@ -88,30 +103,39 @@ const Map = (): JSX.Element => {
           hours: date.getHours(),
         }
       })
-      dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 }, showMarker: false })
+      dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 }, showMarker: false, policeCounter: state.policeCounter + 1 })
     }
     else {
       Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
     }
   }
-  const showPoliceman = (): void => {
+  //this function will be triggered every time when Policeman table is changed
+  const getAllPoliceman = (): void => {
     let data: IFirebase[] = [];
-    //complex operations...
-    database().ref('Policeman/').on('value', (snap: any) => {
+    database().ref('Policeman').on('value', (snap: any) => {
       data = snap.val();
       if (data !== null && data !== undefined) {
         data = Object.values(data);
-        data = calculatingDistance(data, dState.myPosition);
-        sortCalculatedDistance(data);
-        data = nearestThree(data);
-        dDispatch({ type: "setPoliceman", payload: data });
+        data = data.filter((el) => el !== null);
+        dDispatch({ type: "setAllPoliceman", payload: data });
       }
     })
   }
-
+  //complex operations...
+  const findThreeNearestPoliceman = async () => {
+    let value: IFirebase[] = [];
+    try {
+      value = await calculatingDistance(dState.allPoliceman, dState.myPosition);
+      await sortCalculatedDistance(value);
+      value = await nearestThree(value);
+      dDispatch({ type: "setOnlyThreeToShow", payload: value });
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <View style={styles.container}>
-      <AnimateToRegionButton mapRef={mapRef}/>
+      <AnimateToRegionButton mapRef={mapRef} />
       <MapView
         provider={PROVIDER_GOOGLE}
         ref={mapRef}
@@ -124,6 +148,7 @@ const Map = (): JSX.Element => {
         showsMyLocationButton={false}
         rotateEnabled={true}
         showsTraffic={false}
+        onUserLocationChange={(e) => { dDispatch({ type: "setMyPostion", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } }) }}
         initialRegion={{
           latitude: Number(dState.myPosition.latitude),
           longitude: Number(dState.myPosition.longitude),

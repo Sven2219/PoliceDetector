@@ -4,7 +4,8 @@ export interface IState {
     myPosition: IPosition;
     fullScreenFlag: boolean;
     settings: ISettings;
-    policeman: IFirebase[];
+    allPoliceman: IFirebase[];
+    onlyThreeToShow: IFirebase[];
 }
 
 type setMyPosition = {
@@ -19,11 +20,15 @@ type setSettings = {
     readonly type: "setSettings";
     readonly payload: ISettings;
 }
-type setPoliceman = {
-    readonly type: "setPoliceman";
+type setAllPoliceman = {
+    readonly type: "setAllPoliceman";
     readonly payload: IFirebase[]
 }
-export type Actions = setMyPosition | setFullScreenFlag | setSettings | setPoliceman;
+type setOnlyThreeToShow = {
+    readonly type: "setOnlyThreeToShow";
+    readonly payload: IFirebase[];
+}
+export type Actions = setMyPosition | setFullScreenFlag | setSettings | setAllPoliceman | setOnlyThreeToShow;
 
 export const reducer = (state: IState, actions: Actions): IState => {
     switch (actions.type) {
@@ -33,8 +38,10 @@ export const reducer = (state: IState, actions: Actions): IState => {
             return { ...state, fullScreenFlag: actions.payload };
         case "setSettings":
             return { ...state, settings: actions.payload };
-        case "setPoliceman":
-            return { ...state, policeman: actions.payload };
+        case "setAllPoliceman":
+            return { ...state, allPoliceman: actions.payload };
+        case "setOnlyThreeToShow":
+            return { ...state, onlyThreeToShow: actions.payload };
         default:
             return state;
     }

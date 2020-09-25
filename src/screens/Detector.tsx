@@ -11,7 +11,7 @@ interface IProps {
 const Detector = ({ navigation }: IProps) => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
         myPosition: { latitude: 0, longitude: 0 }, fullScreenFlag: false, settings: { notificationFlag: false, autofocusFlag: false, mode: "classic" },
-        policeman: []
+        allPoliceman: [],onlyThreeToShow:[]
     })
     useEffect(() => {
         navigation.setOptions({ tabBarVisible: !state.fullScreenFlag })

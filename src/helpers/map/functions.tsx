@@ -33,7 +33,7 @@ export const preciseDistance = (markerPosition: IPosition, myPosition: IPosition
 
 //complex operations
 
-export const calculatingDistance = (data: IFirebase[], myPosition: IPosition): IFirebase[] => {
+export const calculatingDistance = (data: IFirebase[], myPosition: IPosition) => {
     //O(n);
     return data.map((el) => {
         return ({ ...el, distance: preciseDistance({ longitude: el.longitude, latitude: el.latitude }, myPosition) })
