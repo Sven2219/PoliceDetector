@@ -13,3 +13,7 @@ export const LONGITUDE_DELTA = 100;
 
 //fullscreen
 export const ICON_SIZE = 50;
+
+
+//undoButton
+export const UNDO_BUTTON_BOTTOM = -3;

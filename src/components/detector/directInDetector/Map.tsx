@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useReducer } from 'react';
 import MapView, { MapEvent, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Platform, StyleSheet, View } from 'react-native';
 import { width, height, LATITUDE_DELTA, LONGITUDE_DELTA } from '../../../helpers/constants/MapScreenConst';
 import { DetectorStateContext } from '../../../context/detector/StateContext';
 import { DetectorDispatchContext } from '../../../context/detector/DispatchContext';
@@ -10,6 +10,8 @@ import { IState, Actions, reducer } from '../../../reducers/mapReducer';
 import AddPolicemanButton from '../indirectInDetector/AddPolicemanButton';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+//@ts-ignore
+import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import { checkMode, preciseDistance } from '../../../helpers/map/functions';
 const Map = (): JSX.Element => {
   const { dState } = useContext(DetectorStateContext);
@@ -20,7 +22,7 @@ const Map = (): JSX.Element => {
   //this things should render only once when app starts..
   useEffect(() => {
     checkUserSettings();
-    findMyLocation();
+    messageForLocaction();
   }, [])
   //opening full screen
   const checkUserSettings = () => {
@@ -31,10 +33,19 @@ const Map = (): JSX.Element => {
     //it saves value but I cannot read specific value like .mode...
     database().ref('Users/' + auth().currentUser?.uid).on('value', (snap: any) => {
       const result = snap.val();
-      if(result){
+      if (result) {
         dDispatch({ type: "setSettings", payload: snap.val() })
       }
     })
+  }
+  const messageForLocaction = (): void => {
+    if (Platform.OS === 'android')
+      LocationServicesDialogBox.checkLocationServicesIsEnabled({
+        message: "<h2>Use Location?</h2> \ This app wants to change your device settings:<br/><br/>\ Use GPS for location<br/><br/>",
+        ok: "YES", cancel: "NO"
+      }).then(() => {
+        findMyLocation();
+      })
   }
   const findMyLocation = async (): Promise<void> => {
     try {
@@ -48,24 +59,27 @@ const Map = (): JSX.Element => {
     }
   }
   const saveLocationOfPoliceman = () => {
-    if(preciseDistance(state.markerPosition,dState.myPosition)<=3000){
-      const date:Date = new Date();
+    console.log("markerPosition",state.markerPosition)
+    if (preciseDistance(state.markerPosition, dState.myPosition) <= 3000) {
+      const date: Date = new Date();
       database().ref('Policeman').push({
-        latitude:state.markerPosition.latitude,
-        longitude:state.markerPosition.longitude,
-        date:{
-          minutes:date.getMinutes(),
-          hours:date.getHours(),
+        latitude: state.markerPosition.latitude,
+        longitude: state.markerPosition.longitude,
+        date: {
+          minutes: date.getMinutes(),
+          hours: date.getHours(),
         }
       })
     }
-    else{
-      Alert.alert("Request refused","You can only post a police officer within a 3-mile radius");
+    else {
+      Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
     }
+  }
+  const showPoliceman=()=>{
+    
   }
   return (
     <View style={styles.container}>
-      
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -83,12 +97,12 @@ const Map = (): JSX.Element => {
           longitudeDelta: LONGITUDE_DELTA
         }}
       >
-      <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
-        showMarker={state.showMarker} />
+        <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
+          showMarker={state.showMarker} />
       </MapView>
       <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : saveLocationOfPoliceman() }}
         showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
-        mode={dState.settings.mode}
+        mode={dState.settings.mode} undo={() => dispatch({ type: "setShowMarker", payload: false })}
       />
     </View>)
 };

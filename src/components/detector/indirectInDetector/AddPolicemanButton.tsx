@@ -1,18 +1,31 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { ADD_POLICEMAN_BUTTON_HEIGHT, BUTTON_BOTTOM_FULL_SCREEN, BUTTON_BOTTOM_NOT_FULL_SCREEN, width } from '../../../helpers/constants/MapScreenConst';
+import { ADD_POLICEMAN_BUTTON_HEIGHT, BUTTON_BOTTOM_FULL_SCREEN, BUTTON_BOTTOM_NOT_FULL_SCREEN, ICON_SIZE, UNDO_BUTTON_BOTTOM, width } from '../../../helpers/constants/MapScreenConst';
 import { checkColor } from '../../../helpers/map/functions';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 interface IProps {
     onPress: () => void;
     showMarker: boolean;
     fullScreen: boolean;
     mode: string;
+    undo: () => void;
 }
 
-const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen }: IProps) => {
+const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen, undo }: IProps) => {
     const checkText = () => {
         return (showMarker ? "SAVE POLICEMAN" : "ADD POLICEMAN");
+    }
+    const undoActions = (): JSX.Element | null => {
+        if (showMarker) {
+            return (
+                <View style={styles.undoButtonContainer}>
+                    <MaterialCommunityIcons name="keyboard-backspace" size={ICON_SIZE - 10} color={checkColor(mode)}
+                        onPress={() => undo()}
+                    />
+                </View>
+            )
+        }
+        return null;
     }
     return (
         <View style={[styles.buttonContainer, { bottom: fullScreen ? BUTTON_BOTTOM_FULL_SCREEN : BUTTON_BOTTOM_NOT_FULL_SCREEN }]}>
@@ -23,6 +36,7 @@ const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen }: IProps) =
                     </Text>
                 </View>
             </TouchableOpacity>
+            {undoActions()}
         </View>
     )
 }
@@ -43,6 +57,11 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: 'Merriweather-Regular',
         fontSize: 23,
+    },
+    undoButtonContainer: {
+        position: 'absolute',
+        left: 10,
+        bottom: UNDO_BUTTON_BOTTOM
     }
 })
 

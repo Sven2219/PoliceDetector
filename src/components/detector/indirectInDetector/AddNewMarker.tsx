@@ -14,6 +14,7 @@ const AddNewMarker=({showMarker,onDragEnd}:IProps):JSX.Element|null=>{
         if((fixedMarkerPosition.latitude===0 && fixedMarkerPosition.longitude===0)){
             setFixedMarkerPosition(dState.myPosition)
         }
+        console.log(fixedMarkerPosition)
         return(
             <Marker
                 draggable={true}

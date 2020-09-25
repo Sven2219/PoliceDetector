@@ -15,3 +15,7 @@ export interface ISettings{
   notificationFlag:boolean;
   mode:string;
 }
+
+export interface IFirebase{
+  
+}
