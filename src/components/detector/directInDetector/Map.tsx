@@ -21,15 +21,19 @@ const Map = (): JSX.Element => {
   const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
     showMarker: false, markerPosition: { latitude: 0, longitude: 0 },
   });
-  //this things should render only once when app starts..
   useEffect(() => {
     checkUserSettings();
     messageForLocaction();
-    showPoliceman()
   }, [])
+  useEffect(()=>{
+    //this means that user saved marker position
+    if(state.showMarker===false && state.markerPosition.latitude===0 && state.markerPosition.longitude===0){
+      showPoliceman();
+    }
+  },[dState.myPosition.latitude.toFixed(4) || dState.myPosition.longitude.toFixed(4) || state.showMarker])
   //opening full screen
   const checkUserSettings = () => {
-    //we use here on because when user change map mode or settings it will automaticly change
+    //I use on because when user change map mode or settings it will automaticly change
     //because when we use on it listen on that port all the time
     //this is crucial different between once and on
     //snap:any because when i set type ISettings it doesn't work
@@ -82,7 +86,7 @@ const Map = (): JSX.Element => {
           hours: date.getHours(),
         }
       })
-      dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 } })
+      dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 },showMarker:false })
     }
     else {
       Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
@@ -92,11 +96,14 @@ const Map = (): JSX.Element => {
     let data: IFirebase[] = [];
     //complex operations...
     database().ref('Policeman/').on('value', (snap: any) => {
-      data = Object.values(snap.val());
-      data = calculatingDistance(data, dState.myPosition);
-      sortCalculatedDistance(data);
-      data = nearestThree(data);
-      dDispatch({type:"setPoliceman",payload:data});
+      data = snap.val();
+      if(data!==null && data!==undefined){
+        data = Object.values(data);
+        data = calculatingDistance(data, dState.myPosition);
+        sortCalculatedDistance(data);
+        data = nearestThree(data);
+        dDispatch({type:"setPoliceman",payload:data});
+      }
     })
   }
   return (
