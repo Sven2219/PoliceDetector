@@ -13,6 +13,7 @@ import auth from '@react-native-firebase/auth';
 //@ts-ignore
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import { checkMode, preciseDistance } from '../../../helpers/map/functions';
+import { IPosition } from '../../../helpers/interface/interfaces';
 const Map = (): JSX.Element => {
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
@@ -59,21 +60,31 @@ const Map = (): JSX.Element => {
     }
   }
   const saveLocationOfPoliceman = () => {
-    console.log("markerPosition",state.markerPosition)
-    if (preciseDistance(state.markerPosition, dState.myPosition) <= 3000) {
+    let distance:number = 0;
+    let position:IPosition = {latitude:0,longitude:0};
+    if(state.markerPosition.latitude===0 && state.markerPosition.longitude===0){
+      distance = preciseDistance(dState.myPosition,dState.myPosition);
+      position={latitude:dState.myPosition.latitude,longitude:dState.myPosition.longitude};
+    }
+    else{
+      distance = preciseDistance(state.markerPosition,dState.myPosition)
+      position = {latitude:state.markerPosition.latitude,longitude:state.markerPosition.longitude}
+    }
+    if (distance <= 3000) {
       const date: Date = new Date();
       database().ref('Policeman').push({
-        latitude: state.markerPosition.latitude,
-        longitude: state.markerPosition.longitude,
+        latitude: position.latitude,
+        longitude: position.longitude,
         date: {
           minutes: date.getMinutes(),
           hours: date.getHours(),
-        }
-      })
-    }
-    else {
-      Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
-    }
+          }
+        })
+        dispatch({type:"setMarkerPosition",payload:{latitude:0,longitude:0}})
+      }
+      else {
+        Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
+      }
   }
   const showPoliceman=()=>{
     
@@ -90,6 +101,7 @@ const Map = (): JSX.Element => {
         showsUserLocation={true}
         showsMyLocationButton={false}
         rotateEnabled={true}
+        showsTraffic={false}
         initialRegion={{
           latitude: Number(dState.myPosition.latitude),
           longitude: Number(dState.myPosition.longitude),
