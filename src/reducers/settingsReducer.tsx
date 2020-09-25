@@ -18,8 +18,13 @@ type setNotificationFlag = {
     readonly type: "setNotificationFlag";
     readonly payload: boolean;
 }
-
-export type Actions = setMode | setAutofocusFlag | setNotificationFlag ;
+type setAllSettings = {
+    readonly type: "setAllSettings";
+    readonly autofocusFlag: boolean;
+    readonly notificationFlag: boolean;
+    readonly mode: string;
+}
+export type Actions = setMode | setAutofocusFlag | setNotificationFlag | setAllSettings;
 
 
 export const reducer = (state: IState, actions: Actions): IState => {
@@ -28,8 +33,10 @@ export const reducer = (state: IState, actions: Actions): IState => {
             return { ...state, mode: actions.payload };
         case "setAutofocusFlag":
             return { ...state, autofocusFlag: actions.payload };
-        case "setNotificationFlag": 
+        case "setNotificationFlag":
             return { ...state, notificationFlag: actions.payload };
+        case "setAllSettings":
+            return { ...state, autofocusFlag: actions.autofocusFlag, mode: actions.mode, notificationFlag: actions.notificationFlag };
         default:
             return state;
     }

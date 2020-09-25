@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AnimatedChoosingMode from '../components/settings/AnimatedChoosingMode';
 import Autofocus from '../components/settings/Autofocus';
@@ -15,6 +15,26 @@ interface IProps {
 }
 const Settings = ({ navigation }: IProps): JSX.Element => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, { autofocusFlag: false, notificationFlag: false, mode: "classic" })
+    useEffect(() => {
+        setUserOptions()
+    }, [])
+    //once and on what is the difference 
+    //"on" continues to listen on that port
+    //"once" listen on dat port only once
+    //reason why I use once = because I want data only once when app starts and never again
+    const setUserOptions = async (): Promise<void> => {
+        try {
+            const result = (await database().ref('Users/' + auth().currentUser?.uid).once('value')).val();
+            if (result) {
+                dispatch({
+                    type: "setAllSettings", notificationFlag: result.notificationFlag, autofocusFlag: result.autofocusFlag,
+                    mode: result.mode
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const updateUserOptions = (): void => {
         database().ref('Users/' + auth().currentUser?.uid).update({
             autofocusFlag: state.autofocusFlag,
@@ -36,12 +56,10 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             <MaterialCommunityIcons name="logout" size={ICON_SIZE} onPress={() => logOut()} />
         </View>
 
+        <Notification notificationFlag={state.notificationFlag} onPress={() => dispatch({ type: "setNotificationFlag", payload: !state.notificationFlag })} />
+        <AnimatedChoosingMode mode={state.mode} setMode={(name) => dispatch({ type: "setMode", payload: name })} />
+        <Autofocus autofocusFlag={state.autofocusFlag} onPress={() => dispatch({ type: "setAutofocusFlag", payload: !state.autofocusFlag })} />
 
-        <Notification notificationFlag={state.notificationFlag} onPress={()=>dispatch({ type: "setNotificationFlag", payload: !state.notificationFlag })}/>
-        <AnimatedChoosingMode mode={state.mode} setMode={(name)=>dispatch({ type: "setMode", payload: name })}/>
-        <Autofocus autofocusFlag={state.autofocusFlag} onPress={()=>dispatch({ type: "setAutofocusFlag", payload: !state.autofocusFlag })}/>
-        
-        
         <View style={[styles.positionCenter, styles.updateButtonPosition]}>
             <TouchableWithoutFeedback onPress={() => updateUserOptions()}>
                 <Text style={styles.updateText}>UPDATE</Text>
