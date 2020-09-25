@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import MapView, { MapEvent, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Alert, Platform, StyleSheet, View } from 'react-native';
 import { width, height, LATITUDE_DELTA, LONGITUDE_DELTA } from '../../../helpers/constants/MapScreenConst';
@@ -15,24 +15,26 @@ import LocationServicesDialogBox from 'react-native-android-location-services-di
 import { calculatingDistance, checkMode, nearestThree, preciseDistance, sortCalculatedDistance } from '../../../helpers/map/functions';
 import { IFirebase, IPosition } from '../../../helpers/interface/interfaces';
 import RenderPoliceman from '../indirectInDetector/RenderPoliceman';
+import AnimateToRegionButton from '../indirectInDetector/AnimateToRegionButton';
 const Map = (): JSX.Element => {
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
   const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
     showMarker: false, markerPosition: { latitude: 0, longitude: 0 },
   });
+  const mapRef = useRef<any>();
   useEffect(() => {
     checkUserSettings();
     messageForLocaction();
   }, [])
-  useEffect(()=>{
+  useEffect(() => {
     //this means that user saved marker position
-    if(state.showMarker===false && state.markerPosition.latitude===0 && state.markerPosition.longitude===0){
+    if (state.showMarker === false && state.markerPosition.latitude === 0 && state.markerPosition.longitude === 0) {
       showPoliceman();
     }
-  },[dState.myPosition.latitude.toFixed(4) || dState.myPosition.longitude.toFixed(4) || state.showMarker])
+  }, [dState.myPosition.latitude.toFixed(4) || dState.myPosition.longitude.toFixed(4) || state.showMarker])
   //opening full screen
-  const checkUserSettings = () => {
+  const checkUserSettings = (): void => {
     //I use on because when user change map mode or settings it will automaticly change
     //because when we use on it listen on that port all the time
     //this is crucial different between once and on
@@ -65,7 +67,7 @@ const Map = (): JSX.Element => {
       console.log(error)
     }
   }
-  const saveLocationOfPoliceman = () => {
+  const saveLocationOfPoliceman = (): void => {
     let distance: number = 0;
     let position: IPosition = { latitude: 0, longitude: 0 };
     if (state.markerPosition.latitude === 0 && state.markerPosition.longitude === 0) {
@@ -86,30 +88,33 @@ const Map = (): JSX.Element => {
           hours: date.getHours(),
         }
       })
-      dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 },showMarker:false })
+      dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 }, showMarker: false })
     }
     else {
       Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
     }
   }
-  const showPoliceman = () => {
+  const showPoliceman = (): void => {
     let data: IFirebase[] = [];
     //complex operations...
     database().ref('Policeman/').on('value', (snap: any) => {
       data = snap.val();
-      if(data!==null && data!==undefined){
+      if (data !== null && data !== undefined) {
         data = Object.values(data);
         data = calculatingDistance(data, dState.myPosition);
         sortCalculatedDistance(data);
         data = nearestThree(data);
-        dDispatch({type:"setPoliceman",payload:data});
+        dDispatch({ type: "setPoliceman", payload: data });
       }
     })
   }
+
   return (
     <View style={styles.container}>
+      <AnimateToRegionButton mapRef={mapRef}/>
       <MapView
         provider={PROVIDER_GOOGLE}
+        ref={mapRef}
         style={styles.map}
         customMapStyle={checkMode(dState.settings.mode)}
         zoomEnabled={true}

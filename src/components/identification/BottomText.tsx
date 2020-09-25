@@ -10,7 +10,7 @@ interface IProps {
 }
 
 
-const BottomText = ({ firstPart, secondPart, onPress, marginTop }: IProps) => {
+const BottomText = ({ firstPart, secondPart, onPress, marginTop }: IProps): JSX.Element => {
     return (
         <View style={[styles.positionCenter, { width, marginTop }]}>
             <Text style={styles.bottomTextStyle}>{firstPart}</Text>

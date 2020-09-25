@@ -7,7 +7,7 @@ interface IProps {
     validationError: string;
 }
 
-const ErrorText = ({ translateY, validationError }: IProps) => {
+const ErrorText = ({ translateY, validationError }: IProps): JSX.Element => {
     const isValidColor = (valid: string): string => {
         return valid.match(/(?=valid$)/g) ? "green" : "#b22222";
     }

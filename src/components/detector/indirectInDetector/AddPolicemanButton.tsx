@@ -11,8 +11,8 @@ interface IProps {
     undo: () => void;
 }
 
-const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen, undo }: IProps) => {
-    const checkText = () => {
+const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen, undo }: IProps): JSX.Element => {
+    const checkText = (): string => {
         return (showMarker ? "SAVE POLICEMAN" : "ADD POLICEMAN");
     }
     const undoActions = (): JSX.Element | null => {

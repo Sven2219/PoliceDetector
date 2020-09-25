@@ -6,20 +6,20 @@ interface IProps {
     scrollX: Animated.Value;
     mapMode: IMapMode[];
 }
-const Dots = ({ scrollX, mapMode }: IProps) => {
+const Dots = ({ scrollX, mapMode }: IProps): JSX.Element => {
     const translateX = scrollX.interpolate({
         inputRange: [-IMAGE_WIDTH, 0, IMAGE_WIDTH],
         outputRange: [-DOT_SIZE, 0, DOT_SIZE]
     })
     return (
-    <View style={{ flexDirection: 'row' }}>
-        <Animated.View style={[styles.paginationIndicator, { transform: [{ translateX }] }]} />
-        {mapMode.map(({ id }) => {
-            return (<View style={styles.dotContainer} key={id}>
-                <View style={[styles.dotStyle]} />
-            </View>)
-        })}
-    </View>)
+        <View style={{ flexDirection: 'row' }}>
+            <Animated.View style={[styles.paginationIndicator, { transform: [{ translateX }] }]} />
+            {mapMode.map(({ id }) => {
+                return (<View style={styles.dotContainer} key={id}>
+                    <View style={[styles.dotStyle]} />
+                </View>)
+            })}
+        </View>)
 }
 const styles = StyleSheet.create({
     dotContainer: {

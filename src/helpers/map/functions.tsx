@@ -35,7 +35,7 @@ export const preciseDistance = (markerPosition: IPosition, myPosition: IPosition
 
 export const calculatingDistance = (data: IFirebase[], myPosition: IPosition): IFirebase[] => {
     //O(n);
-    return data.map((el)=>{
+    return data.map((el) => {
         return ({ ...el, distance: preciseDistance({ longitude: el.longitude, latitude: el.latitude }, myPosition) })
     })
 
@@ -54,3 +54,13 @@ export const nearestThree = (res: IFirebase[]): IFirebase[] => {
     let len = res.length > 3 ? 3 : res.length;
     return res.slice(0, len)
 }
+export const animateToRegion=(timing:number,myPosition:IPosition,mapRef:any):void=>{
+    let region={
+      latitude:Number(myPosition.latitude),
+      longitude:Number(myPosition.longitude),
+      latitudeDelta:0.009,
+      longitudeDelta:0.009,
+      useNativeDriver:true
+    };
+    mapRef.current.animateToRegion(region,timing)
+  }

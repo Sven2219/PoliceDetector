@@ -6,12 +6,12 @@ import Ticker from './Ticker';
 import Dots from './Dots';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-interface IProps{
-    mode:string;
-    setMode:(name:string)=>void;
+interface IProps {
+    mode: string;
+    setMode: (name: string) => void;
 }
 
-const AnimatedChoosingMode = ({mode,setMode}:IProps): JSX.Element => {
+const AnimatedChoosingMode = ({ mode, setMode }: IProps): JSX.Element => {
     const [mapMode, setMapMode] = useState<IMapMode[]>([]);
     const scrollX = useRef(new Animated.Value(0)).current;
     useEffect(() => {
@@ -33,7 +33,7 @@ const AnimatedChoosingMode = ({mode,setMode}:IProps): JSX.Element => {
     return (
         <View>
             <View style={styles.tickerContainer}>
-                <Ticker scrollX={scrollX} mapMode={mapMode} mode={mode}/>
+                <Ticker scrollX={scrollX} mapMode={mapMode} mode={mode} />
             </View>
             <View style={{ padding: RIGHT_PADDING / 2 }}>
                 <Animated.FlatList

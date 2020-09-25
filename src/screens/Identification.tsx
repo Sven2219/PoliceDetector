@@ -76,7 +76,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
     }
 
     const showConfirmPassword = (): JSX.Element | null => {
-        return !state.loginFlag 
+        return !state.loginFlag
             ?
             <AnimatedTextInput translateY={translateY} iconName={"account-key"}
                 onFocus={() => dispatch({ type: "setToggled", payload: true })} secureTextEntry={state.showConfirmPassword}
@@ -110,11 +110,11 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         }
         else if (!state.loginFlag && state.password === state.confirmPassword && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
             try {
-                await auth().createUserWithEmailAndPassword(state.email, state.password);    
-                await database().ref('Users/'+auth().currentUser?.uid).set({
-                    autofocusFlag:false,
-                    notificationFlag:false,
-                    mode:"classic"
+                await auth().createUserWithEmailAndPassword(state.email, state.password);
+                await database().ref('Users/' + auth().currentUser?.uid).set({
+                    autofocusFlag: false,
+                    notificationFlag: false,
+                    mode: "classic"
                 })
                 dispatch({ type: "clear" })
                 navigation.navigate('TabBar')
@@ -129,7 +129,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
     const showGlobalError = (): JSX.Element | null => {
         return state.globalError !== "" ? <Text style={styles.globalError}>{state.globalError}</Text> : null;
     }
-    const showButtonOrSpinner = () => {
+    const showButtonOrSpinner = (): JSX.Element => {
         return state.spinnerFlag
             ?
             <View style={styles.positionCenter}><Spinner size={30} /></View>

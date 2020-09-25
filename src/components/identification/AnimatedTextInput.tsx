@@ -16,12 +16,12 @@ interface IProps {
     iconName: string;
 }
 
-const AnimatedTextInput = ({ value, secureTextEntry, onFocus, onChangeText, onPress, placeholder, translateY, iconName }: IProps) => {
+const AnimatedTextInput = ({ value, secureTextEntry, onFocus, onChangeText, onPress, placeholder, translateY, iconName }: IProps): JSX.Element => {
 
     const secureTextEntryIcon = (flag: boolean): JSX.Element => {
         return flag ? <MaterialCommunityIcons name="eye-outline" size={ICON_SIZE} /> : <MaterialCommunityIcons name="eye-off-outline" size={ICON_SIZE} />
     }
-    const optionalIcon = () => {
+    const optionalIcon = (): JSX.Element | null => {
         if (secureTextEntry !== undefined && onPress) {
             return (
                 <TouchableOpacity onPress={() => onPress()}>{secureTextEntryIcon(secureTextEntry)}</TouchableOpacity>

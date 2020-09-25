@@ -10,14 +10,14 @@ interface IProps {
 }
 const Detector = ({ navigation }: IProps) => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
-        myPosition: { latitude: 0, longitude: 0 },fullScreenFlag:false,settings:{notificationFlag:false,autofocusFlag:false,mode:"classic"},
-        policeman:[]
+        myPosition: { latitude: 0, longitude: 0 }, fullScreenFlag: false, settings: { notificationFlag: false, autofocusFlag: false, mode: "classic" },
+        policeman: []
     })
     useEffect(() => {
         navigation.setOptions({ tabBarVisible: !state.fullScreenFlag })
     }, [state.fullScreenFlag])
     return (
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
             <DetectorDispatchContext.Provider value={{ dDispatch: dispatch }}>
                 <DetectorStateContext.Provider value={{ dState: state }}>
                     <FullScreen />

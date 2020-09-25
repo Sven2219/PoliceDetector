@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-interface IProps{
-    autofocusFlag:boolean;
-    onPress:()=>void;
+interface IProps {
+    autofocusFlag: boolean;
+    onPress: () => void;
 }
-const Autofocus = ({autofocusFlag,onPress}:IProps) => {
+const Autofocus = ({ autofocusFlag, onPress }: IProps): JSX.Element => {
     const isActive = (): string => {
         return autofocusFlag ? "#006400" : "#000";
     }

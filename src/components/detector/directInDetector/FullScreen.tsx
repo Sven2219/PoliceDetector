@@ -6,21 +6,21 @@ import { DetectorStateContext } from '../../../context/detector/StateContext';
 import { ICON_SIZE } from '../../../helpers/constants/MapScreenConst';
 import { checkColor } from '../../../helpers/map/functions';
 
-const FullScreen = () => {
-    const {dDispatch} = useContext(DetectorDispatchContext);
-    const {dState} = useContext(DetectorStateContext);
+const FullScreen = (): JSX.Element => {
+    const { dDispatch } = useContext(DetectorDispatchContext);
+    const { dState } = useContext(DetectorStateContext);
     return (
         <View style={styles.iconPosition}>
-            <MaterialCommunityIcons name="fullscreen" size={ICON_SIZE} onPress={() => dDispatch({type:"setFullScreenFlag",payload:!dState.fullScreenFlag})} color={checkColor(dState.settings.mode)}/>
+            <MaterialCommunityIcons name="fullscreen" size={ICON_SIZE} onPress={() => dDispatch({ type: "setFullScreenFlag", payload: !dState.fullScreenFlag })} color={checkColor(dState.settings.mode)} />
         </View>
     )
 }
 const styles = StyleSheet.create({
-    iconPosition:{
-        position:'absolute',
-        left:10,
-        top:10,
-        zIndex:1
+    iconPosition: {
+        position: 'absolute',
+        left: 10,
+        top: 10,
+        zIndex: 1
     }
 })
 
