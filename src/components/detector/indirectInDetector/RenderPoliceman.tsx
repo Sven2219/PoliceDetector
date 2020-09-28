@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { Marker, Callout } from 'react-native-maps';
 import { DetectorStateContext } from '../../../context/detector/StateContext';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, StyleSheet } from 'react-native';
 import { IFirebase } from '../../../helpers/interface/interfaces';
 import { getDifferenceInMinutes, getDifferenceInHours, getDifferenceInDays } from '../../../helpers/map/functions';
 import Policeman from './Policeman';
 import database from '@react-native-firebase/database';
+import { CALLOUT_HEIGHT, CALLOUT_WIDTH } from '../../../helpers/constants/MapScreenConst';
 //Error => Solution :Function
 //JSX element type 'Element[]' is not a constructor function for JSX elements.
 //Type 'Element[]' is missing the following properties from type 'Element': type, props, key
@@ -60,9 +61,9 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
                     coordinate={{ latitude: Number(marker.latitude), longitude: Number(marker.longitude) }}
                 >
                     <Policeman />
-                    <Callout onPress={() => handleCalloutPress(marker)} style={{height:30,position:'absolute'}}>
-                        <View style={{height:30}}>
-                            <Text style={{ fontSize: 16, fontFamily: "Merriweather-Regular" }}>{formatDifferenceInMinutes(marker)}</Text>
+                    <Callout onPress={() => handleCalloutPress(marker)} style={styles.calloutContainer}>
+                        <View style={styles.calloutContainer}>
+                            <Text style={styles.calloutTextStyle}>{formatDifferenceInMinutes(marker)}</Text>
                         </View>
                     </Callout>
                 </Marker>
@@ -72,4 +73,14 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
     return null;
 
 }
+const styles = StyleSheet.create({
+    calloutContainer:{
+        height:CALLOUT_HEIGHT,
+        width:CALLOUT_WIDTH
+    },
+    calloutTextStyle:{
+        fontSize: 16,
+        fontFamily: "Merriweather-Regular"
+    }
+})
 export default RenderPoliceman;

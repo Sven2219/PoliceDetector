@@ -36,7 +36,7 @@ const Map = (): JSX.Element => {
   }, [])
   useEffect(() => {
     if (dState.allPoliceman) {
-      //it is called every time when policeman table is changed or user position
+      //it is called every time when policeman table or user position is changed
       findThreeNearestPoliceman();
     }
   }, [dState.allPoliceman || (dState.myPosition.latitude.toFixed(3) || dState.myPosition.longitude.toFixed(3))])
@@ -74,7 +74,7 @@ const Map = (): JSX.Element => {
       console.log(error)
     }
   }
-  //This function is counting keys---- this is the reason why I use set method not push
+  //This function is counting keys ---- this is the reason why I use set method not push
   const countPoliceman = (): void => {
     let lastIndex: string | null = '';
     database().ref('Policeman').limitToLast(1).once('child_added').then((snap) => {
@@ -124,12 +124,12 @@ const Map = (): JSX.Element => {
       data = snap.val();
       if (data !== null && data !== undefined) {
         data = Object.values(data);
+        //O(n) complexity
         data = data.filter((el) => el !== null);
         dDispatch({ type: "setAllPoliceman", payload: data });
       }
     })
   }
-  //complex operations...
   const findThreeNearestPoliceman = (): void => {
     let value: IFirebase[] = [];
     try {

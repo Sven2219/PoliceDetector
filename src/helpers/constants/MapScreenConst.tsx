@@ -17,3 +17,9 @@ export const ICON_SIZE = 50;
 
 //undoButton
 export const UNDO_BUTTON_BOTTOM = -3;
+
+
+
+//Callout dim
+export const CALLOUT_WIDTH = 60;
+export const CALLOUT_HEIGHT = 50;
