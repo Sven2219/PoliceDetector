@@ -21,4 +21,5 @@ export interface IFirebase{
   longitude:number;
   date:{hours:number,minutes:number}
   distance?:number|undefined;
+  id:number;
 }

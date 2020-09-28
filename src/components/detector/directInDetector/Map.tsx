@@ -21,23 +21,25 @@ const Map = (): JSX.Element => {
   const { dDispatch } = useContext(DetectorDispatchContext);
   const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
     showMarker: false, markerPosition: { latitude: 0, longitude: 0 },
-    policeCounter: 0
+    policeCounter: 0,
   });
   const mapRef = useRef<any>();
   useEffect(() => {
+    //listener
+    getAllPoliceman();
+    //only once
     countPoliceman();
+    //listener
     checkUserSettings();
+    //only once
     messageForLocaction();
   }, [])
   useEffect(() => {
-    //this means that user saved marker position
-    getAllPoliceman();
-  }, [state.policeCounter])
-  useEffect(() => {
-    if(dState.allPoliceman){
+    if (dState.allPoliceman) {
+      //it is called every time when policeman table is changed or user position
       findThreeNearestPoliceman();
     }
-  }, [dState.allPoliceman])
+  }, [dState.allPoliceman || (dState.myPosition.latitude.toFixed(3) || dState.myPosition.longitude.toFixed(3))])
   //opening full screen
   const checkUserSettings = (): void => {
     //I use on because when user change map mode or settings it will automaticly change
@@ -72,15 +74,16 @@ const Map = (): JSX.Element => {
       console.log(error)
     }
   }
+  //This function is counting keys---- this is the reason why I use set method not push
   const countPoliceman = (): void => {
     let lastIndex: string | null = '';
-    database().ref('Policeman/').limitToLast(1).once('child_added')
-      .then((snap) => {
-        lastIndex = snap.key;
-        if (lastIndex) {
-          dispatch({ type: "setPoliceCounter", payload: parseInt(lastIndex)+1});
-        }
-      }).catch((error) => { console.log(error) })
+    database().ref('Policeman').limitToLast(1).once('child_added').then((snap) => {
+      lastIndex = snap.key;
+      if (lastIndex) {
+        console.log(parseInt(lastIndex)+1);
+        dispatch({ type: "setPoliceCounter", payload: parseInt(lastIndex) + 1 });
+      }
+    })
   }
   const saveLocationOfPoliceman = (): void => {
     let distance: number = 0;
@@ -101,7 +104,9 @@ const Map = (): JSX.Element => {
         date: {
           minutes: date.getMinutes(),
           hours: date.getHours(),
-        }
+        },
+        //this is used for deleting policeman
+        id: state.policeCounter
       })
       dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 }, showMarker: false, policeCounter: state.policeCounter + 1 })
     }
@@ -109,7 +114,8 @@ const Map = (): JSX.Element => {
       Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
     }
   }
-  //this function will be triggered every time when Policeman table is changed
+
+  //this function will be triggered every time when Policeman table is changed(delete or add )
   const getAllPoliceman = (): void => {
     let data: IFirebase[] = [];
     database().ref('Policeman').on('value', (snap: any) => {
@@ -122,14 +128,12 @@ const Map = (): JSX.Element => {
     })
   }
   //complex operations...
-  const findThreeNearestPoliceman =(): void => {
+  const findThreeNearestPoliceman = (): void => {
     let value: IFirebase[] = [];
     try {
-      value =  calculatingDistance(dState.allPoliceman, dState.myPosition);
-      console.log("before sorting",value)
+      value = calculatingDistance(dState.allPoliceman, dState.myPosition);
       sortCalculatedDistance(value);
-      console.log("sorted",value);
-      value =  nearestThree(value);
+      value = nearestThree(value);
       dDispatch({ type: "setOnlyThreeToShow", payload: value });
     } catch (error) {
       console.log(error)
