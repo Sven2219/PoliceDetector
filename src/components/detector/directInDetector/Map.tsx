@@ -31,13 +31,13 @@ const Map = (): JSX.Element => {
   }, [])
   useEffect(() => {
     //this means that user saved marker position
-    if (state.showMarker === false) {
-      getAllPoliceman();
-    }
-  }, [state.showMarker])
+    getAllPoliceman();
+  }, [state.policeCounter])
   useEffect(() => {
-    findThreeNearestPoliceman();
-  }, [dState.myPosition.longitude || dState.myPosition.latitude])
+    if(dState.allPoliceman){
+      findThreeNearestPoliceman();
+    }
+  }, [dState.allPoliceman])
   //opening full screen
   const checkUserSettings = (): void => {
     //I use on because when user change map mode or settings it will automaticly change
@@ -52,6 +52,7 @@ const Map = (): JSX.Element => {
       }
     })
   }
+  console.log("police counter",state.policeCounter);
   const messageForLocaction = (): void => {
     if (Platform.OS === 'android')
       LocationServicesDialogBox.checkLocationServicesIsEnabled({
@@ -78,7 +79,7 @@ const Map = (): JSX.Element => {
       .then((snap) => {
         lastIndex = snap.key;
         if (lastIndex) {
-          dispatch({ type: "setPoliceCounter", payload: parseInt(lastIndex) });
+          dispatch({ type: "setPoliceCounter", payload: parseInt(lastIndex)+1});
         }
       }).catch((error) => { console.log(error) })
   }
@@ -122,12 +123,12 @@ const Map = (): JSX.Element => {
     })
   }
   //complex operations...
-  const findThreeNearestPoliceman = async () => {
+  const findThreeNearestPoliceman = (): void => {
     let value: IFirebase[] = [];
     try {
-      value = await calculatingDistance(dState.allPoliceman, dState.myPosition);
-      await sortCalculatedDistance(value);
-      value = await nearestThree(value);
+      value = calculatingDistance(dState.allPoliceman, dState.myPosition);
+      sortCalculatedDistance(value);
+      value = nearestThree(value);
       dDispatch({ type: "setOnlyThreeToShow", payload: value });
     } catch (error) {
       console.log(error)
