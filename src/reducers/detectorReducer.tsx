@@ -6,6 +6,7 @@ export interface IState {
     settings: ISettings;
     allPoliceman: IFirebase[];
     onlyThreeToShow: IFirebase[];
+    notificationModalFlag: boolean;
 }
 
 type setMyPosition = {
@@ -28,7 +29,11 @@ type setOnlyThreeToShow = {
     readonly type: "setOnlyThreeToShow";
     readonly payload: IFirebase[];
 }
-export type Actions = setMyPosition | setFullScreenFlag | setSettings | setAllPoliceman | setOnlyThreeToShow;
+type setNotificationModalFlag = {
+    readonly type: "setNotificationModalFlag";
+    readonly payload: boolean;
+}
+export type Actions = setMyPosition | setFullScreenFlag | setSettings | setAllPoliceman | setOnlyThreeToShow | setNotificationModalFlag;
 
 export const reducer = (state: IState, actions: Actions): IState => {
     switch (actions.type) {
@@ -42,6 +47,8 @@ export const reducer = (state: IState, actions: Actions): IState => {
             return { ...state, allPoliceman: actions.payload };
         case "setOnlyThreeToShow":
             return { ...state, onlyThreeToShow: actions.payload };
+        case "setNotificationModalFlag":
+            return { ...state, notificationModalFlag: actions.payload };
         default:
             return state;
     }

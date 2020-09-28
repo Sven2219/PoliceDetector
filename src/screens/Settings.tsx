@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import AnimatedChoosingMode from '../components/settings/AnimatedChoosingMode';
 import Autofocus from '../components/settings/Autofocus';
 import Notification from '../components/settings/Notification';
@@ -40,7 +40,7 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             autofocusFlag: state.autofocusFlag,
             notificationFlag: state.notificationFlag,
             mode: state.mode
-        })
+        }).then(()=>Alert.alert('You have successfully updated settings'))
     }
     const logOut = async (): Promise<void> => {
         try {

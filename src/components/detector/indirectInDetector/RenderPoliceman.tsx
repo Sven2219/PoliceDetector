@@ -35,9 +35,9 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
         let differenceInHours = 0;
         let differenceInDay = 0;
         if (differenceInMinutes >= 60) {
-            differenceInHours = getDifferenceInHours(date1, date2);
+            differenceInHours = Math.floor(getDifferenceInHours(date1, date2));
             if (differenceInHours >= 24) {
-                differenceInDay = getDifferenceInDays(date1, date2);
+                differenceInDay = Math.floor(getDifferenceInDays(date1, date2));
             }
         }
         return createMessage(differenceInMinutes, differenceInHours, differenceInDay)

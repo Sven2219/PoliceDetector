@@ -12,7 +12,7 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 //@ts-ignore
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import { calculatingDistance, checkMode, nearestThree, preciseDistance, sortCalculatedDistance } from '../../../helpers/map/functions';
+import { animateToRegion, calculatingDistance, checkMode, nearestThree, preciseDistance, sortCalculatedDistance } from '../../../helpers/map/functions';
 import { IFirebase, IPosition } from '../../../helpers/interface/interfaces';
 import RenderPoliceman from '../indirectInDetector/RenderPoliceman';
 import AnimateToRegionButton from '../indirectInDetector/AnimateToRegionButton';
@@ -26,20 +26,34 @@ const Map = (): JSX.Element => {
   const mapRef = useRef<any>();
   useEffect(() => {
     //listener
-    getAllPoliceman();
-    //only once
-    countPoliceman();
-    //listener
     checkUserSettings();
     //only once
     messageForLocaction();
+    //only once
+    countPoliceman();
+    //listener
+    getAllPoliceman();
   }, [])
+  useEffect(()=>{
+    if(dState.settings.autofocusFlag){
+      animateToRegion(1000,dState.myPosition,mapRef)
+    }
+  },[dState.myPosition.latitude || dState.myPosition.longitude])
+  
   useEffect(() => {
     if (dState.allPoliceman) {
       //it is called every time when policeman table or user position is changed
       findThreeNearestPoliceman();
     }
-  }, [dState.allPoliceman || (dState.myPosition.latitude.toFixed(3) || dState.myPosition.longitude.toFixed(3))])
+  }, [dState.allPoliceman])
+
+  useEffect(()=>{
+    findThreeNearestPoliceman();
+  },[dState.myPosition.latitude || dState.myPosition.longitude])
+
+
+
+
   //opening full screen
   const checkUserSettings = (): void => {
     //I use on because when user change map mode or settings it will automaticly change
