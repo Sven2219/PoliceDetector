@@ -43,7 +43,7 @@ export const calculatingDistance = (data: IFirebase[], myPosition: IPosition) =>
 export const sortCalculatedDistance = (res: IFirebase[]): void => {
     //O(nLog(n))
     res.sort((a, b): any => {
-        if (a.distance && b.distance) {
+        if (a.distance!==undefined && b.distance!==undefined) {
             return a.distance - b.distance;
         }
     })

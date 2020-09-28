@@ -52,7 +52,6 @@ const Map = (): JSX.Element => {
       }
     })
   }
-  console.log("police counter",state.policeCounter);
   const messageForLocaction = (): void => {
     if (Platform.OS === 'android')
       LocationServicesDialogBox.checkLocationServicesIsEnabled({
@@ -123,12 +122,14 @@ const Map = (): JSX.Element => {
     })
   }
   //complex operations...
-  const findThreeNearestPoliceman = (): void => {
+  const findThreeNearestPoliceman =(): void => {
     let value: IFirebase[] = [];
     try {
-      value = calculatingDistance(dState.allPoliceman, dState.myPosition);
+      value =  calculatingDistance(dState.allPoliceman, dState.myPosition);
+      console.log("before sorting",value)
       sortCalculatedDistance(value);
-      value = nearestThree(value);
+      console.log("sorted",value);
+      value =  nearestThree(value);
       dDispatch({ type: "setOnlyThreeToShow", payload: value });
     } catch (error) {
       console.log(error)
