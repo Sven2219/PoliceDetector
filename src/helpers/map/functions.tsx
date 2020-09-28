@@ -63,4 +63,21 @@ export const animateToRegion=(timing:number,myPosition:IPosition,mapRef:any):voi
       useNativeDriver:true
     };
     mapRef.current.animateToRegion(region,timing)
-  }
+}
+
+//CALLOUT -> IN RENDER POLICEMAN
+
+export const getDifferenceInMinutes=(date1:any, date2:any)=> {
+    const diffInMs = Math.abs(date2 - date1);
+    return diffInMs / (1000 * 60);
+}
+export const getDifferenceInHours=(date1:any, date2:any)=>{
+    const diffInMs = Math.abs(date2 - date1);
+    return diffInMs / (1000 * 60 * 60);
+}
+export const getDifferenceInDays=(date1:any, date2:any)=>{
+    const diffInMs = Math.abs(date2 - date1);
+    return diffInMs / (1000 * 60 * 60 * 24);
+}
+
+

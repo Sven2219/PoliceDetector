@@ -80,7 +80,6 @@ const Map = (): JSX.Element => {
     database().ref('Policeman').limitToLast(1).once('child_added').then((snap) => {
       lastIndex = snap.key;
       if (lastIndex) {
-        console.log(parseInt(lastIndex)+1);
         dispatch({ type: "setPoliceCounter", payload: parseInt(lastIndex) + 1 });
       }
     })
@@ -104,6 +103,9 @@ const Map = (): JSX.Element => {
         date: {
           minutes: date.getMinutes(),
           hours: date.getHours(),
+          day: date.getDate(),
+          month:date.getMonth()+1,
+          year:date.getFullYear()
         },
         //this is used for deleting policeman
         id: state.policeCounter
@@ -162,7 +164,8 @@ const Map = (): JSX.Element => {
           longitudeDelta: LONGITUDE_DELTA
         }}
       >
-        <RenderPoliceman />
+      <RenderPoliceman />
+
         <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
           showMarker={state.showMarker} />
       </MapView>
