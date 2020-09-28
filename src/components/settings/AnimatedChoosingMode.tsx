@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
 import { IMapMode } from '../../helpers/interface/interfaces';
 import { IMAGE_WIDTH, IMAGE_HEIGHT, width, RIGHT_PADDING, TICKER_HEIGHT, DOT_SIZE } from '../../helpers/constants/SettingsConst';
@@ -14,9 +14,11 @@ interface IProps {
 const AnimatedChoosingMode = ({ mode, setMode }: IProps): JSX.Element => {
     const [mapMode, setMapMode] = useState<IMapMode[]>([]);
     const scrollX = useRef(new Animated.Value(0)).current;
+
     useEffect(() => {
         setMapModes();
     }, [])
+    
     const setMapModes = async (): Promise<void> => {
         try {
             const data = await require('./mapModes/mapMode.json');
@@ -90,4 +92,5 @@ const styles = StyleSheet.create({
         left: width / 5
     }
 })
+
 export default AnimatedChoosingMode;

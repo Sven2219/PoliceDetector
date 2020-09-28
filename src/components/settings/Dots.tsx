@@ -2,15 +2,18 @@ import React from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
 import { IMapMode } from '../../helpers/interface/interfaces';
 import { DOT_SIZE, IMAGE_WIDTH } from '../../helpers/constants/SettingsConst';
+
 interface IProps {
     scrollX: Animated.Value;
     mapMode: IMapMode[];
 }
+
 const Dots = ({ scrollX, mapMode }: IProps): JSX.Element => {
     const translateX = scrollX.interpolate({
         inputRange: [-IMAGE_WIDTH, 0, IMAGE_WIDTH],
         outputRange: [-DOT_SIZE, 0, DOT_SIZE]
     })
+
     return (
         <View style={{ flexDirection: 'row' }}>
             <Animated.View style={[styles.paginationIndicator, { transform: [{ translateX }] }]} />
@@ -43,4 +46,5 @@ const styles = StyleSheet.create({
         left: DOT_SIZE + 3
     }
 })
+
 export default Dots;

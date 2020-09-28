@@ -4,9 +4,11 @@ import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-n
 import { View, StatusBar, Image, StyleSheet } from 'react-native';
 import { width, ITEM_HEIGHT } from '../helpers/constants/SplashScreenConst';
 import auth from '@react-native-firebase/auth';
+
 interface IProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
+
 const SplashScreen = ({ navigation }: IProps): JSX.Element => {
     useEffect(() => {
         const firebaseConfig = {
@@ -50,4 +52,5 @@ const styles = StyleSheet.create({
         flex: 1
     }
 })
+
 export default SplashScreen;

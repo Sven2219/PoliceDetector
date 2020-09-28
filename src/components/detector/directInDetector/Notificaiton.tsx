@@ -3,10 +3,8 @@ import { Modal, StyleSheet, View, Text } from 'react-native';
 import { DetectorStateContext } from '../../../context/detector/StateContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { DetectorDispatchContext } from '../../../context/detector/DispatchContext';
-import { ICON_SIZE } from '../../../helpers/constants/MapScreenConst';
 import { checkTextColorForModal, modalColor } from '../../../helpers/map/functions';
 import { height } from '../../../helpers/constants/MapScreenConst';
-
 
 const Notification = (): JSX.Element | null => {
     const { dState } = useContext(DetectorStateContext);
@@ -30,27 +28,26 @@ const Notification = (): JSX.Element | null => {
                 <View style={styles.distanceTextContainer}>
                     <Text style={styles.distanceTextStyle}>COUNTING DOWN{'\n'}METERS TO THE{'\n'}POLICE = {policeDistance()}m</Text>
                 </View>
-                
             </View>
         </Modal>
     )
 }
 
 const styles = StyleSheet.create({
-    distanceTextContainer:{
-        justifyContent:'center',
-        alignItems:'center',
-        flexDirection:'row',
-        height:height/2,
+    distanceTextContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        height: height / 2,
     },
-    distanceTextStyle:{
-        fontSize:30,
-        fontWeight:"bold",
+    distanceTextStyle: {
+        fontSize: 30,
+        fontWeight: "bold",
     },
-    backIconPosition:{
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center'
+    backIconPosition: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
 

@@ -6,14 +6,17 @@ import Notification from '../components/detector/directInDetector/Notificaiton';
 import { DetectorDispatchContext } from '../context/detector/DispatchContext';
 import { DetectorStateContext } from '../context/detector/StateContext';
 import { Actions, IState, reducer } from '../reducers/detectorReducer';
+
 interface IProps {
     navigation: any;
 }
+
 const Detector = ({ navigation }: IProps) => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
         myPosition: { latitude: 0, longitude: 0 }, fullScreenFlag: false, settings: { notificationFlag: false, autofocusFlag: false, mode: "classic" },
         allPoliceman: [], onlyThreeToShow: [], notificationModalFlag: false
     })
+
     useEffect(() => {
         navigation.setOptions({ tabBarVisible: !state.fullScreenFlag })
     }, [state.fullScreenFlag])
@@ -23,6 +26,7 @@ const Detector = ({ navigation }: IProps) => {
             startCountdown();
         }
     }, [state.myPosition.longitude.toFixed(3) || state.myPosition.latitude.toFixed(3)])
+    
     const startCountdown = (): void => {
         try {
             const dis: number | undefined = state.onlyThreeToShow[0].distance;

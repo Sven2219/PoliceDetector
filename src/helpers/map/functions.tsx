@@ -1,6 +1,7 @@
 import { dark, classic, retro, silver, night } from '../../components/settings/mapModes/modesFromGoogle';
 import { IFirebase, IPosition } from '../interface/interfaces';
 import { getPreciseDistance } from 'geolib';
+
 //mode depend on state=>mode
 export const checkMode = (mode: string) => {
     switch (mode) {
@@ -36,8 +37,6 @@ export const preciseDistance = (markerPosition: IPosition, myPosition: IPosition
     )
     return dis;
 }
-
-//complex operations
 
 export const calculatingDistance = (data: IFirebase[], myPosition: IPosition) => {
     //O(n);

@@ -10,11 +10,14 @@ import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-n
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import { ICON_SIZE } from '../helpers/constants/SettingsConst';
+
 interface IProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
+
 const Settings = ({ navigation }: IProps): JSX.Element => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, { autofocusFlag: false, notificationFlag: false, mode: "classic" })
+    
     useEffect(() => {
         setUserOptions()
     }, [])
@@ -40,7 +43,7 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             autofocusFlag: state.autofocusFlag,
             notificationFlag: state.notificationFlag,
             mode: state.mode
-        }).then(()=>Alert.alert('You have successfully updated settings'))
+        }).then(() => Alert.alert('You have successfully updated settings'))
     }
     const logOut = async (): Promise<void> => {
         try {
@@ -91,4 +94,5 @@ const styles = StyleSheet.create({
         top: 20
     }
 })
+
 export default Settings;

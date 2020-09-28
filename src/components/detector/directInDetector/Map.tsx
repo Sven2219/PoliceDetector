@@ -16,6 +16,7 @@ import { animateToRegion, calculatingDistance, checkMode, nearestThree, preciseD
 import { IFirebase, IPosition } from '../../../helpers/interface/interfaces';
 import RenderPoliceman from '../indirectInDetector/RenderPoliceman';
 import AnimateToRegionButton from '../indirectInDetector/AnimateToRegionButton';
+
 const Map = (): JSX.Element => {
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
@@ -24,6 +25,7 @@ const Map = (): JSX.Element => {
     policeCounter: 0,
   });
   const mapRef = useRef<any>();
+
   useEffect(() => {
     //listener
     checkUserSettings();
@@ -34,12 +36,12 @@ const Map = (): JSX.Element => {
     //listener
     getAllPoliceman();
   }, [])
-  useEffect(()=>{
-    if(dState.settings.autofocusFlag){
-      animateToRegion(1000,dState.myPosition,mapRef)
+  useEffect(() => {
+    if (dState.settings.autofocusFlag) {
+      animateToRegion(1000, dState.myPosition, mapRef)
     }
-  },[dState.myPosition.latitude || dState.myPosition.longitude])
-  
+  }, [dState.myPosition.latitude || dState.myPosition.longitude])
+
   useEffect(() => {
     if (dState.allPoliceman) {
       //it is called every time when policeman table or user position is changed
@@ -47,11 +49,9 @@ const Map = (): JSX.Element => {
     }
   }, [dState.allPoliceman])
 
-  useEffect(()=>{
+  useEffect(() => {
     findThreeNearestPoliceman();
-  },[dState.myPosition.latitude || dState.myPosition.longitude])
-
-
+  }, [dState.myPosition.latitude || dState.myPosition.longitude])
 
 
   //opening full screen
@@ -118,8 +118,8 @@ const Map = (): JSX.Element => {
           minutes: date.getMinutes(),
           hours: date.getHours(),
           day: date.getDate(),
-          month:date.getMonth()+1,
-          year:date.getFullYear()
+          month: date.getMonth() + 1,
+          year: date.getFullYear()
         },
         //this is used for deleting policeman
         id: state.policeCounter
@@ -178,7 +178,7 @@ const Map = (): JSX.Element => {
           longitudeDelta: LONGITUDE_DELTA
         }}
       >
-      <RenderPoliceman />
+        <RenderPoliceman />
 
         <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
           showMarker={state.showMarker} />

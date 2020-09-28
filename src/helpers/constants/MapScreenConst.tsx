@@ -20,6 +20,12 @@ export const UNDO_BUTTON_BOTTOM = -3;
 
 
 
-//Callout dim
+//callout dim
 export const CALLOUT_WIDTH = 60;
 export const CALLOUT_HEIGHT = 50;
+
+
+export const POLICEMAN_SVG_WIDTH = width / 15.6;
+export const POLICEMAN_SVG_HEIGHT = height / 15;
+export const POLICEMAN_IMAGE_WIDTH = width / 13;
+export const POLICEMAN_IMAGE_HEIGHT = height / 14.9;

@@ -2,11 +2,13 @@ import React from 'react';
 import { View, Animated, Text, StyleSheet } from 'react-native';
 import { IMapMode } from '../../helpers/interface/interfaces';
 import { TICKER_HEIGHT, IMAGE_WIDTH } from '../../helpers/constants/SettingsConst';
+
 interface IProps {
     scrollX: Animated.Value;
     mapMode: IMapMode[];
     mode: string;
 }
+
 const Ticker = ({ scrollX, mapMode, mode }: IProps): JSX.Element => {
 
     const inputRange = [-IMAGE_WIDTH, 0, IMAGE_WIDTH];
@@ -37,4 +39,5 @@ const styles = StyleSheet.create({
         lineHeight: TICKER_HEIGHT
     }
 })
+
 export default Ticker;

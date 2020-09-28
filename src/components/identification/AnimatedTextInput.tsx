@@ -17,7 +17,6 @@ interface IProps {
 }
 
 const AnimatedTextInput = ({ value, secureTextEntry, onFocus, onChangeText, onPress, placeholder, translateY, iconName }: IProps): JSX.Element => {
-
     const secureTextEntryIcon = (flag: boolean): JSX.Element => {
         return flag ? <MaterialCommunityIcons name="eye-outline" size={ICON_SIZE} /> : <MaterialCommunityIcons name="eye-off-outline" size={ICON_SIZE} />
     }

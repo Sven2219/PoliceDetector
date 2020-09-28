@@ -9,7 +9,6 @@ interface IProps {
     marginTop: number;
 }
 
-
 const BottomText = ({ firstPart, secondPart, onPress, marginTop }: IProps): JSX.Element => {
     return (
         <View style={[styles.positionCenter, { width, marginTop }]}>
@@ -33,6 +32,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Merriweather-Regular'
     },
 })
-
 
 export default BottomText;

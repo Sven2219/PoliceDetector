@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
+
 interface IProps {
     size: number;
 }
+
 const Spinner = (props: IProps): JSX.Element => {
     return (
         <View style={styles.spinnerStyle}>
@@ -17,4 +19,5 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 })
+
 export default Spinner;

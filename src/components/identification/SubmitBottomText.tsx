@@ -25,11 +25,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        top:20
+        top: 20
     },
     submitText: {
         fontSize: 22,
         fontFamily: 'Merriweather-Regular'
     },
 })
+
 export default SubmitButtonText;

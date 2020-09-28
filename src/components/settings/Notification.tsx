@@ -1,15 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
-import { Actions } from '../../reducers/detectorReducer';
 
-interface IProps{
-    notificationFlag:boolean;
-    onPress:()=>void;
+interface IProps {
+    notificationFlag: boolean;
+    onPress: () => void;
 }
 
-const Notification = ({notificationFlag,onPress}:IProps): JSX.Element => {
+const Notification = ({ notificationFlag, onPress }: IProps): JSX.Element => {
 
     const isActive = (): string => {
         return notificationFlag ? "#006400" : "#000";

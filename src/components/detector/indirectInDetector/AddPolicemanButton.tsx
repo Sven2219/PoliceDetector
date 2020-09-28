@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ADD_POLICEMAN_BUTTON_HEIGHT, BUTTON_BOTTOM_FULL_SCREEN, BUTTON_BOTTOM_NOT_FULL_SCREEN, ICON_SIZE, UNDO_BUTTON_BOTTOM, width } from '../../../helpers/constants/MapScreenConst';
 import { checkColor } from '../../../helpers/map/functions';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 interface IProps {
     onPress: () => void;
     showMarker: boolean;

@@ -10,8 +10,10 @@ import { CALLOUT_HEIGHT, CALLOUT_WIDTH } from '../../../helpers/constants/MapScr
 //Error => Solution :Function
 //JSX element type 'Element[]' is not a constructor function for JSX elements.
 //Type 'Element[]' is missing the following properties from type 'Element': type, props, key
+
 const RenderPoliceman: Function = (): JSX.Element[] | null => {
     const { dState } = useContext(DetectorStateContext);
+
     const handleCalloutPress = (marker: IFirebase): void => {
         Alert.alert("Delete policeman", "The police are no longer there?", [
             {
@@ -42,14 +44,14 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
         }
         return createMessage(differenceInMinutes, differenceInHours, differenceInDay)
     }
-    const createMessage = (differenceInMinutes:number,differenceInHours:number,differenceInDay:number) => {
-        if(differenceInDay!==0){
-            return "before "+differenceInDay+" day";
+    const createMessage = (differenceInMinutes: number, differenceInHours: number, differenceInDay: number) => {
+        if (differenceInDay !== 0) {
+            return "before " + differenceInDay + " day";
         }
-        else if(differenceInHours!==0){
-            return "before "+differenceInHours+" hours";
+        else if (differenceInHours !== 0) {
+            return "before " + differenceInHours + " hours";
         }
-        return "before "+differenceInMinutes+" min";
+        return "before " + differenceInMinutes + " min";
     }
     if (dState.onlyThreeToShow !== null && dState.onlyThreeToShow !== undefined) {
         return (
@@ -74,13 +76,14 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
 
 }
 const styles = StyleSheet.create({
-    calloutContainer:{
-        height:CALLOUT_HEIGHT,
-        width:CALLOUT_WIDTH
+    calloutContainer: {
+        height: CALLOUT_HEIGHT,
+        width: CALLOUT_WIDTH
     },
-    calloutTextStyle:{
+    calloutTextStyle: {
         fontSize: 16,
         fontFamily: "Merriweather-Regular"
     }
 })
+
 export default RenderPoliceman;

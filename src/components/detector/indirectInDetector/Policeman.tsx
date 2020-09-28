@@ -1,12 +1,13 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
 import Svg, { Image } from 'react-native-svg';
-const { width, height } = Dimensions.get("screen");
+import { POLICEMAN_IMAGE_HEIGHT, POLICEMAN_IMAGE_WIDTH, POLICEMAN_SVG_HEIGHT, POLICEMAN_SVG_WIDTH } from '../../../helpers/constants/MapScreenConst';
+
 const Policeman = (): JSX.Element => {
     return (
-        <Svg width={width / 15.6} height={height / 15}>
-            <Image href={require('../../../images/policeman.png')} width={width / 13} height={height / 14.9} />
+        <Svg width={POLICEMAN_SVG_WIDTH} height={POLICEMAN_SVG_HEIGHT}>
+            <Image href={require('../../../images/policeman.png')} width={POLICEMAN_IMAGE_WIDTH} height={POLICEMAN_IMAGE_HEIGHT} />
         </Svg>
     )
 }
+
 export default Policeman;

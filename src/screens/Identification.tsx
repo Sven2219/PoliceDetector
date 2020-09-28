@@ -20,6 +20,7 @@ import Spinner from '../components/identification/Spinner';
 interface IProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
+
 const Login = ({ navigation }: IProps): JSX.Element => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
         email: "", password: "", confirmPassword: "",
@@ -34,6 +35,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         inputRange: [0, 1],
         outputRange: [0, -100]
     })
+
     useEffect(() => {
         Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
         Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
@@ -101,7 +103,6 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         if (state.loginFlag && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
             try {
                 await auth().signInWithEmailAndPassword(state.email, state.password);
-
                 dispatch({ type: "clear" })
                 navigation.navigate('TabBar')
             } catch (error) {
