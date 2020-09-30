@@ -44,7 +44,7 @@ const Map = (): JSX.Element => {
 
   useEffect(() => {
     if (dState.allPoliceman) {
-      //it is called every time when policeman table or user position is changed
+      //it is called every time when policeman table or user position changes
       findThreeNearestPoliceman();
     }
   }, [dState.allPoliceman])
@@ -56,11 +56,7 @@ const Map = (): JSX.Element => {
 
   //opening full screen
   const checkUserSettings = (): void => {
-    //I use on because when user change map mode or settings it will automaticly change
-    //because when we use on it listen on that port all the time
-    //this is crucial different between once and on
-    //snap:any because when i set type ISettings it doesn't work
-    //it saves value but I cannot read specific value like .mode...
+    //I use on because when user change map mode or another settings it will automaticly update
     database().ref('Users/' + auth().currentUser?.uid).on('value', (snap: any) => {
       const result = snap.val();
       if (result) {
@@ -88,7 +84,6 @@ const Map = (): JSX.Element => {
       console.log(error)
     }
   }
-  //This function is counting keys ---- this is the reason why I use set method not push
   const countPoliceman = (): void => {
     let lastIndex: string | null = '';
     database().ref('Policeman').limitToLast(1).once('child_added').then((snap) => {
@@ -109,6 +104,7 @@ const Map = (): JSX.Element => {
       distance = preciseDistance(state.markerPosition, dState.myPosition)
       position = { latitude: state.markerPosition.latitude, longitude: state.markerPosition.longitude }
     }
+    //User can only put policeman in radius of 3000m
     if (distance <= 3000) {
       const date: Date = new Date();
       database().ref('Policeman/' + state.policeCounter).set({
@@ -121,7 +117,6 @@ const Map = (): JSX.Element => {
           month: date.getMonth() + 1,
           year: date.getFullYear()
         },
-        //this is used for deleting policeman
         id: state.policeCounter
       })
       dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 }, showMarker: false, policeCounter: state.policeCounter + 1 })

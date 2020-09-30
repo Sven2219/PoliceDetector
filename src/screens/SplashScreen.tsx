@@ -24,9 +24,7 @@ const SplashScreen = ({ navigation }: IProps): JSX.Element => {
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-        //because I want to show splash screen for 3 sec
-        // I know that onAuthStateChanged is faster than that
-        //But goal is to show image for 3 sec
+        //The goal is to show image for 3 sec
         setTimeout(() => {
             auth().onAuthStateChanged((user) => {
                 user?.email ? navigation.navigate('TabBar') : navigation.navigate('Identifcation')

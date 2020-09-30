@@ -53,7 +53,7 @@ export const sortCalculatedDistance = (res: IFirebase[]): void => {
         }
     })
 }
-// is O(n) where n is end - start.
+// O(n) where n is end - start.
 //in my case worst scenario is O(3)
 export const nearestThree = (res: IFirebase[]): IFirebase[] => {
     let len = res.length > 3 ? 3 : res.length;

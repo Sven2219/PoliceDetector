@@ -26,11 +26,9 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
             }
         ], { cancelable: false })
     }
-    const formatDifferenceInMinutes = (marker: IFirebase) => {
+    const formatDifferenceInMinutes = (marker: IFirebase): string => {
         //I don't like to use moment.js because it is huge library
-        //From their documentation
-        //In most cases, you should not choose Moment for new projects.
-        //However there are some possible reasons you might want to keep using it
+        //From their documentation =>In most cases, you should not choose Moment for new projects.However there are some possible reasons you might want to keep using it
         const date1 = new Date(marker.date.year, marker.date.month - 1, marker.date.day, marker.date.hours, marker.date.minutes);
         const date2 = new Date();
         const differenceInMinutes = Math.floor(getDifferenceInMinutes(date1, date2));
@@ -44,7 +42,7 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
         }
         return createMessage(differenceInMinutes, differenceInHours, differenceInDay)
     }
-    const createMessage = (differenceInMinutes: number, differenceInHours: number, differenceInDay: number) => {
+    const createMessage = (differenceInMinutes: number, differenceInHours: number, differenceInDay: number): string => {
         if (differenceInDay !== 0) {
             return "before " + differenceInDay + " day";
         }

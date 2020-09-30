@@ -9,8 +9,6 @@ import BottomText from '../components/identification/BottomText';
 import AnimatedTextInput from '../components/identification/AnimatedTextInput';
 import ErrorText from '../components/identification/ErrorText'
 import SubmitButtonText from '../components/identification/SubmitBottomText';
-//when I installed package this error occurred
-//https://stackoverflow.com/questions/48249633/errorcannot-fit-requested-classes-in-a-single-dex-file-try-supplying-a-main-dex
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
@@ -28,8 +26,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         loginFlag: false, toggled: false, showPassword: false,
         showConfirmPassword: false, globalError: "", spinnerFlag: false
     });
-    //simple transition depend on toggle state
-    //if toggle is true it will go to -100 else => 0
+    //transition depend on toggle state
     const transition = useTransition(state.toggled, { duration: 1000 });
     const translateY = interpolate(transition, {
         inputRange: [0, 1],
@@ -53,7 +50,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         dispatch({ type: "setToggled", payload: false })
     };
 
-    //function that validate user input
+    
     const validateEmail = (email: string): void => {
         const validateEmail = email.match(/^\w+(.\w+)@gmail.com$/g);
         validateEmail ? dispatch({ type: "setValidateEmail", email: email, emailValidationError: "Email is valid" }) :
@@ -96,8 +93,6 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             <BottomText firstPart={'Dont have an account?'} secondPart={'Register here'}
                 onPress={() => dispatch({ type: "setLoginFlag", payload: false })} marginTop={155} />
     }
-    //identificate user 
-    //It could be in one but then I would have to implement ifs in that try catch
     const identificate = async (): Promise<void> => {
         dispatch({ type: "setSpinnerFlag", payload: true });
         if (state.loginFlag && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
@@ -136,7 +131,6 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             <View style={styles.positionCenter}><Spinner size={30} /></View>
             :
             <SubmitButtonText loginFlag={state.loginFlag} onPress={() => identificate()} />
-
     }
     return (
         <View style={{ flex: 1 }}>

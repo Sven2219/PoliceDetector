@@ -21,10 +21,8 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
     useEffect(() => {
         setUserOptions()
     }, [])
-    //once and on what is the difference 
-    //"on" continues to listen on that port
-    //"once" listen on dat port only once
-    //reason why I use once = because I want data only once when app starts and never again
+    //I used once because I don't need to listen for changes
+    //The data is needed only once
     const setUserOptions = async (): Promise<void> => {
         try {
             const result = (await database().ref('Users/' + auth().currentUser?.uid).once('value')).val();
