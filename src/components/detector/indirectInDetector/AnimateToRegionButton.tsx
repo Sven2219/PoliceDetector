@@ -11,10 +11,13 @@ interface IProps {
 
 const AnimateToRegionButton = ({ mapRef }: IProps): JSX.Element => {
     const { dState } = useContext(DetectorStateContext);
-    
+
     return (
         <View style={styles.animateButtonContainer}>
-            <MaterialCommunityIcons name="crosshairs-gps" size={ICON_SIZE} color={checkColor(dState.settings.mode)} onPress={() => animateToRegion(2000, dState.myPosition, mapRef)} />
+            <MaterialCommunityIcons name="crosshairs-gps"
+                size={ICON_SIZE}
+                color={checkColor(dState.settings.mode)}
+                onPress={() => animateToRegion(2000, dState.myPosition, mapRef)} />
         </View>
     )
 }

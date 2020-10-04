@@ -19,7 +19,11 @@ const Ticker = ({ scrollX, mapMode, mode }: IProps): JSX.Element => {
     return (<View style={styles.tickerContainer}>
         <Animated.View style={{ transform: [{ translateY }] }}>
             {mapMode.map(({ name }, index) => {
-                return (<Text key={index} style={[styles.tickerText, { color: name === mode ? "#228b22" : "#000" }]}>{name}</Text>)
+                return (
+                    <Text key={index} style={[styles.tickerText, { color: name === mode ? "#228b22" : "#000" }]}>
+                        {name}
+                    </Text>
+                )
             })}
         </Animated.View>
     </View>)

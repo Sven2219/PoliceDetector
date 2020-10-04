@@ -9,10 +9,12 @@ import { checkColor } from '../../../helpers/map/functions';
 const FullScreen = (): JSX.Element => {
     const { dDispatch } = useContext(DetectorDispatchContext);
     const { dState } = useContext(DetectorStateContext);
-    
+
     return (
         <View style={styles.iconPosition}>
-            <MaterialCommunityIcons name="fullscreen" size={ICON_SIZE} onPress={() => dDispatch({ type: "setFullScreenFlag", payload: !dState.fullScreenFlag })} color={checkColor(dState.settings.mode)} />
+            <MaterialCommunityIcons name="fullscreen" size={ICON_SIZE}
+                onPress={() => dDispatch({ type: "setFullScreenFlag", payload: !dState.fullScreenFlag })}
+                color={checkColor(dState.settings.mode)} />
         </View>
     )
 }

@@ -20,7 +20,9 @@ const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen, undo }: IPr
         if (showMarker) {
             return (
                 <View style={styles.undoButtonContainer}>
-                    <MaterialCommunityIcons name="keyboard-backspace" size={ICON_SIZE - 10} color={checkColor(mode)}
+                    <MaterialCommunityIcons name="keyboard-backspace"
+                        size={ICON_SIZE - 10}
+                        color={checkColor(mode)}
                         onPress={() => undo()}
                     />
                 </View>

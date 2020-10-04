@@ -18,7 +18,16 @@ interface IProps {
 
 const AnimatedTextInput = ({ value, secureTextEntry, onFocus, onChangeText, onPress, placeholder, translateY, iconName }: IProps): JSX.Element => {
     const secureTextEntryIcon = (flag: boolean): JSX.Element => {
-        return flag ? <MaterialCommunityIcons name="eye-outline" size={ICON_SIZE} /> : <MaterialCommunityIcons name="eye-off-outline" size={ICON_SIZE} />
+        if (flag) {
+            return (
+                <MaterialCommunityIcons name="eye-outline"
+                    size={ICON_SIZE} />
+            )
+        }
+        return (
+            <MaterialCommunityIcons name="eye-off-outline"
+                size={ICON_SIZE} />
+        )
     }
     const optionalIcon = (): JSX.Element | null => {
         if (secureTextEntry !== undefined && onPress) {
@@ -31,7 +40,9 @@ const AnimatedTextInput = ({ value, secureTextEntry, onFocus, onChangeText, onPr
     return (
         <Animated.View style={[styles.reinputContainer, { transform: [{ translateY }] }]}>
             <MaterialCommunityIcons name={iconName} size={ICON_SIZE} />
-            <TextInput onFocus={() => onFocus()} secureTextEntry={!secureTextEntry} value={value} onChangeText={(text: string) => onChangeText(text)} placeholder={placeholder} style={styles.textInputSize} />
+            <TextInput onFocus={() => onFocus()} secureTextEntry={!secureTextEntry}
+                value={value} onChangeText={(text: string) => onChangeText(text)}
+                placeholder={placeholder} style={styles.textInputSize} />
             {optionalIcon()}
         </Animated.View>
     )

@@ -23,7 +23,9 @@ const Notification = (): JSX.Element | null => {
         <Modal transparent={true} visible={dState.notificationModalFlag}>
             <View style={{ backgroundColor: modalColor(dState.settings.mode), flex: 1 }}>
                 <View style={styles.backIconPosition}>
-                    <MaterialCommunityIcons name="keyboard-backspace" size={60} color={checkTextColorForModal(dState.settings.mode)} onPress={() => dDispatch({ type: "setNotificationModalFlag", payload: false })} />
+                    <MaterialCommunityIcons name="keyboard-backspace" size={60}
+                        color={checkTextColorForModal(dState.settings.mode)}
+                        onPress={() => dDispatch({ type: "setNotificationModalFlag", payload: false })} />
                 </View>
                 <View style={styles.distanceTextContainer}>
                     <Text style={styles.distanceTextStyle}>COUNTING DOWN{'\n'}METERS TO THE{'\n'}POLICE = {policeDistance()}m</Text>

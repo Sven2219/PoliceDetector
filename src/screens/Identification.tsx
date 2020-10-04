@@ -50,11 +50,15 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         dispatch({ type: "setToggled", payload: false })
     };
 
-    
+
     const validateEmail = (email: string): void => {
         const validateEmail = email.match(/^\w+(.\w+)@gmail.com$/g);
-        validateEmail ? dispatch({ type: "setValidateEmail", email: email, emailValidationError: "Email is valid" }) :
+        if (validateEmail) {
+            dispatch({ type: "setValidateEmail", email: email, emailValidationError: "Email is valid" })
+        }
+        else {
             dispatch({ type: "setValidateEmail", email: email, emailValidationError: "Invalid email" })
+        }
     }
     const validatePassword = (password: string): void => {
         const validateNumbers = password.match(/(?=(?:\D*\d){2,})/g);
@@ -75,23 +79,29 @@ const Login = ({ navigation }: IProps): JSX.Element => {
     }
 
     const showConfirmPassword = (): JSX.Element | null => {
-        return !state.loginFlag
-            ?
-            <AnimatedTextInput translateY={translateY} iconName={"account-key"}
-                onFocus={() => dispatch({ type: "setToggled", payload: true })} secureTextEntry={state.showConfirmPassword}
-                value={state.confirmPassword}
-                onChangeText={(confirmPassword: string) => dispatch({ type: "setValidateConfirmPassword", payload: confirmPassword })}
-                placeholder="***********" onPress={() => dispatch({ type: "setShowConfirmPassword", payload: !state.showConfirmPassword })} />
-            : null;
+        if (!state.loginFlag) {
+            return (
+                <AnimatedTextInput iconName={"account-key"} onFocus={() => dispatch({ type: "setToggled", payload: true })}
+                    secureTextEntry={state.showConfirmPassword} translateY={translateY}
+                    value={state.confirmPassword} placeholder="***********"
+                    onChangeText={(confirmPassword: string) => dispatch({ type: "setValidateConfirmPassword", payload: confirmPassword })}
+                    onPress={() => dispatch({ type: "setShowConfirmPassword", payload: !state.showConfirmPassword })} />
+            )
+        }
+        return null;
     }
     const bottomText = (): JSX.Element => {
-        return !state.loginFlag
-            ?
-            <BottomText firstPart={'Allready have an account?'} secondPart={'Sign in here'}
-                onPress={() => dispatch({ type: "setLoginFlag", payload: true })} marginTop={80} />
-            :
+        if (!state.loginFlag) {
+            return (
+                <BottomText firstPart={'Allready have an account?'} secondPart={'Sign in here'}
+                    onPress={() => dispatch({ type: "setLoginFlag", payload: true })} marginTop={80} />
+            )
+        }
+        return (
             <BottomText firstPart={'Dont have an account?'} secondPart={'Register here'}
                 onPress={() => dispatch({ type: "setLoginFlag", payload: false })} marginTop={155} />
+        )
+
     }
     const identificate = async (): Promise<void> => {
         dispatch({ type: "setSpinnerFlag", payload: true });
@@ -123,14 +133,22 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         }
     }
     const showGlobalError = (): JSX.Element | null => {
-        return state.globalError !== "" ? <Text style={styles.globalError}>{state.globalError}</Text> : null;
+        if (state.globalError !== "") {
+            return (
+                <Text style={styles.globalError}>{state.globalError}</Text>
+            )
+        }
+        return null;
     }
     const showButtonOrSpinner = (): JSX.Element => {
-        return state.spinnerFlag
-            ?
-            <View style={styles.positionCenter}><Spinner size={30} /></View>
-            :
+        if (state.spinnerFlag) {
+            return (
+                <View style={styles.positionCenter}><Spinner size={30} /></View>
+            )
+        }
+        return (
             <SubmitButtonText loginFlag={state.loginFlag} onPress={() => identificate()} />
+        )
     }
     return (
         <View style={{ flex: 1 }}>
@@ -140,13 +158,14 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             <Animated.View style={[styles.capContainer, { transform: [{ translateY }] }]}>
                 <Image source={require('../images/policeCap.png')} style={styles.policeCapDimensions} />
             </Animated.View>
-            <AnimatedTextInput iconName={"email"} onFocus={() => dispatch({ type: "setToggled", payload: true })} translateY={translateY}
-                secureTextEntry={true}
+            <AnimatedTextInput iconName={"email"} onFocus={() => dispatch({ type: "setToggled", payload: true })}
+                translateY={translateY} secureTextEntry={true}
                 onChangeText={(email: string) => validateEmail(email)} value={state.email} placeholder="sven.suk5@gmail.com"
             />
             <ErrorText translateY={translateY} validationError={state.emailValidationError} />
-            <AnimatedTextInput translateY={translateY} iconName={"account-key"} onFocus={() => dispatch({ type: "setToggled", payload: true })} secureTextEntry={state.showPassword}
-                value={state.password} onChangeText={(password: string) => validatePassword(password)}
+            <AnimatedTextInput iconName={"account-key"} onFocus={() => dispatch({ type: "setToggled", payload: true })}
+                translateY={translateY} secureTextEntry={state.showPassword}
+                onChangeText={(password: string) => validatePassword(password)} value={state.password}
                 placeholder="***********" onPress={() => dispatch({ type: "setShowPassword", payload: !state.showPassword })} />
             <ErrorText translateY={translateY} validationError={state.passwordValidationError} />
             {showConfirmPassword()}

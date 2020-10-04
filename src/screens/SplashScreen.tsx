@@ -27,7 +27,12 @@ const SplashScreen = ({ navigation }: IProps): JSX.Element => {
         //The goal is to show image for 3 sec
         setTimeout(() => {
             auth().onAuthStateChanged((user) => {
-                user?.email ? navigation.navigate('TabBar') : navigation.navigate('Identifcation')
+                if(user?.email){
+                    navigation.navigate('TabBar')
+                }
+                else{
+                    navigation.navigate('Identifcation')
+                }
             })
         }, 3000)
     }, [])

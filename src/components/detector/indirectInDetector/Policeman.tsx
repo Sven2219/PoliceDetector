@@ -5,7 +5,9 @@ import { POLICEMAN_IMAGE_HEIGHT, POLICEMAN_IMAGE_WIDTH, POLICEMAN_SVG_HEIGHT, PO
 const Policeman = (): JSX.Element => {
     return (
         <Svg width={POLICEMAN_SVG_WIDTH} height={POLICEMAN_SVG_HEIGHT}>
-            <Image href={require('../../../images/policeman.png')} width={POLICEMAN_IMAGE_WIDTH} height={POLICEMAN_IMAGE_HEIGHT} />
+            <Image href={require('../../../images/policeman.png')}
+                width={POLICEMAN_IMAGE_WIDTH}
+                height={POLICEMAN_IMAGE_HEIGHT} />
         </Svg>
     )
 }

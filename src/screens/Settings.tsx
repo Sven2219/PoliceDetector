@@ -17,7 +17,7 @@ interface IProps {
 
 const Settings = ({ navigation }: IProps): JSX.Element => {
     const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, { autofocusFlag: false, notificationFlag: false, mode: "classic" })
-    
+
     useEffect(() => {
         setUserOptions()
     }, [])
@@ -57,9 +57,13 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             <MaterialCommunityIcons name="logout" size={ICON_SIZE} onPress={() => logOut()} />
         </View>
 
-        <Notification notificationFlag={state.notificationFlag} onPress={() => dispatch({ type: "setNotificationFlag", payload: !state.notificationFlag })} />
+        <Notification notificationFlag={state.notificationFlag}
+            onPress={() => dispatch({ type: "setNotificationFlag", payload: !state.notificationFlag })} />
+
         <AnimatedChoosingMode mode={state.mode} setMode={(name) => dispatch({ type: "setMode", payload: name })} />
-        <Autofocus autofocusFlag={state.autofocusFlag} onPress={() => dispatch({ type: "setAutofocusFlag", payload: !state.autofocusFlag })} />
+
+        <Autofocus autofocusFlag={state.autofocusFlag}
+            onPress={() => dispatch({ type: "setAutofocusFlag", payload: !state.autofocusFlag })} />
 
         <View style={[styles.positionCenter, styles.updateButtonPosition]}>
             <TouchableWithoutFeedback onPress={() => updateUserOptions()}>
