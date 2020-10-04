@@ -16,7 +16,8 @@ interface IProps {
 }
 
 const Settings = ({ navigation }: IProps): JSX.Element => {
-    const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, { autofocusFlag: false, notificationFlag: false, mode: "classic" })
+    const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, { autofocusFlag: false, 
+        notificationFlag: false, mode: "classic" })
 
     useEffect(() => {
         setUserOptions()
@@ -51,6 +52,8 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             console.log(error)
         }
     }
+    //In this screen, useMemo might do more harm than good
+    
     return (<ScrollView>
         <View style={styles.titleContainer}>
             <Text style={styles.titleStyle}>SETTINGS</Text>

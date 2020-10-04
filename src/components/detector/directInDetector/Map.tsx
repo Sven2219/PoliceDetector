@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import MapView, { MapEvent, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Alert, Platform, StyleSheet, View } from 'react-native';
 import { width, height, LATITUDE_DELTA, LONGITUDE_DELTA } from '../../../helpers/constants/MapScreenConst';
@@ -150,6 +150,16 @@ const Map = (): JSX.Element => {
       console.log(error)
     }
   }
+
+  //Optimize
+  const AddPolicemanButtonMemo = useMemo(() =>
+    <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : saveLocationOfPoliceman() }}
+      showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
+      mode={dState.settings.mode} undo={() => dispatch({ type: "setShowMarker", payload: false })}
+    />
+    , [state.showMarker,dState.settings,dState.fullScreenFlag])
+
+
   return (
     <View style={styles.container}>
       <AnimateToRegionButton mapRef={mapRef} />
@@ -178,10 +188,7 @@ const Map = (): JSX.Element => {
         <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
           showMarker={state.showMarker} />
       </MapView>
-      <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : saveLocationOfPoliceman() }}
-        showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
-        mode={dState.settings.mode} undo={() => dispatch({ type: "setShowMarker", payload: false })}
-      />
+      {AddPolicemanButtonMemo}
     </View>)
 };
 const styles = StyleSheet.create({

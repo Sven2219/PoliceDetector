@@ -1,20 +1,18 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { DetectorDispatchContext } from '../../../context/detector/DispatchContext';
-import { DetectorStateContext } from '../../../context/detector/StateContext';
 import { ICON_SIZE } from '../../../helpers/constants/MapScreenConst';
 import { checkColor } from '../../../helpers/map/functions';
-
-const FullScreen = (): JSX.Element => {
-    const { dDispatch } = useContext(DetectorDispatchContext);
-    const { dState } = useContext(DetectorStateContext);
-
+interface IProps{
+    onPress:()=>void;
+    mode:string;
+}
+const FullScreen = ({onPress,mode}:IProps): JSX.Element => {
     return (
         <View style={styles.iconPosition}>
             <MaterialCommunityIcons name="fullscreen" size={ICON_SIZE}
-                onPress={() => dDispatch({ type: "setFullScreenFlag", payload: !dState.fullScreenFlag })}
-                color={checkColor(dState.settings.mode)} />
+                onPress={() => onPress()}
+                color={checkColor(mode)} />
         </View>
     )
 }

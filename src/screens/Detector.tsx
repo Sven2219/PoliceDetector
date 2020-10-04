@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import { View } from 'react-native';
 import FullScreen from '../components/detector/directInDetector/FullScreen';
 import Map from '../components/detector/directInDetector/Map';
@@ -26,7 +26,7 @@ const Detector = ({ navigation }: IProps) => {
             startCountdown();
         }
     }, [state.myPosition.longitude.toFixed(3) || state.myPosition.latitude.toFixed(3)])
-    
+
     const startCountdown = (): void => {
         try {
             const dis: number | undefined = state.onlyThreeToShow[0].distance;
@@ -35,15 +35,23 @@ const Detector = ({ navigation }: IProps) => {
             }
         } catch (error) { }
     }
+    //Optimize
+
+    const FullScreenMemo = useMemo(() =>
+        <FullScreen onPress={() =>
+            dispatch({ type: "setFullScreenFlag", payload: !state.fullScreenFlag })}
+            mode={state.settings.mode} />
+        , [state.fullScreenFlag, state.settings])
     return (
         <View style={{ flex: 1 }}>
+            {FullScreenMemo}
             <DetectorDispatchContext.Provider value={{ dDispatch: dispatch }}>
                 <DetectorStateContext.Provider value={{ dState: state }}>
-                    <FullScreen />
                     <Map />
                     <Notification />
                 </DetectorStateContext.Provider>
             </DetectorDispatchContext.Provider>
+
         </View>
     )
 }

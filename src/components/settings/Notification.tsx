@@ -9,7 +9,6 @@ interface IProps {
 }
 
 const Notification = ({ notificationFlag, onPress }: IProps): JSX.Element => {
-
     const isActive = (): string => {
         return notificationFlag ? "#006400" : "#000";
     }
