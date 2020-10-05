@@ -24,7 +24,7 @@ const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen, undo }: IPr
                     <MaterialCommunityIcons name="keyboard-backspace"
                         size={ICON_SIZE - 10}
                         color={checkColor(mode)}
-                        onPress={() => undo()}
+                        onPress={undo}
                     />
                 </View>
             )
@@ -33,7 +33,7 @@ const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen, undo }: IPr
     }
     return (
         <View style={[styles.buttonContainer, { bottom: fullScreen ? BUTTON_BOTTOM_FULL_SCREEN : BUTTON_BOTTOM_NOT_FULL_SCREEN }]}>
-            <TouchableOpacity onPress={() => onPress()}>
+            <TouchableOpacity onPress={onPress}>
                 <View style={styles.positionCenter}>
                     <Text style={[styles.text, { color: checkColor(mode) }]}>
                         {checkText()}

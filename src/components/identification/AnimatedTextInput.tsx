@@ -32,7 +32,7 @@ const AnimatedTextInput = ({ value, secureTextEntry, onFocus, onChangeText, onPr
     const optionalIcon = (): JSX.Element | null => {
         if (secureTextEntry !== undefined && onPress) {
             return (
-                <TouchableOpacity onPress={() => onPress()}>{secureTextEntryIcon(secureTextEntry)}</TouchableOpacity>
+                <TouchableOpacity onPress={onPress}>{secureTextEntryIcon(secureTextEntry)}</TouchableOpacity>
             )
         }
         return null;
@@ -40,7 +40,7 @@ const AnimatedTextInput = ({ value, secureTextEntry, onFocus, onChangeText, onPr
     return (
         <Animated.View style={[styles.reinputContainer, { transform: [{ translateY }] }]}>
             <MaterialCommunityIcons name={iconName} size={ICON_SIZE} />
-            <TextInput onFocus={() => onFocus()} secureTextEntry={!secureTextEntry}
+            <TextInput onFocus={onFocus} secureTextEntry={!secureTextEntry}
                 value={value} onChangeText={(text: string) => onChangeText(text)}
                 placeholder={placeholder} style={styles.textInputSize} />
             {optionalIcon()}

@@ -13,7 +13,7 @@ const BottomText = ({ firstPart, secondPart, onPress, marginTop }: IProps): JSX.
     return (
         <View style={[styles.positionCenter, { width, marginTop }]}>
             <Text style={styles.bottomTextStyle}>{firstPart}</Text>
-            <TouchableOpacity onPress={() => onPress()}>
+            <TouchableOpacity onPress={onPress}>
                 <Text style={[styles.bottomTextStyle, { color: 'blue' }]}>{secondPart}</Text>
             </TouchableOpacity>
         </View>

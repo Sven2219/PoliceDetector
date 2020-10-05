@@ -13,7 +13,7 @@ const Notification = ({ notificationFlag, onPress }: IProps): JSX.Element => {
         return notificationFlag ? "#006400" : "#000";
     }
     return (<View style={styles.mainContainer}>
-        <TouchableWithoutFeedback onPress={() => onPress()}>
+        <TouchableWithoutFeedback onPress={onPress}>
             <Feather name="bell" size={50} color={isActive()} />
         </TouchableWithoutFeedback>
         <Text style={styles.textStyle}>If you want to receive alerts {'\n'}1.5km before the map detects{'\n'}a police officer, press the icon.</Text>

@@ -57,7 +57,7 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
     return (<ScrollView>
         <View style={styles.titleContainer}>
             <Text style={styles.titleStyle}>SETTINGS</Text>
-            <MaterialCommunityIcons name="logout" size={ICON_SIZE} onPress={() => logOut()} />
+            <MaterialCommunityIcons name="logout" size={ICON_SIZE} onPress={logOut} />
         </View>
 
         <Notification notificationFlag={state.notificationFlag}
@@ -69,7 +69,7 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             onPress={() => dispatch({ type: "setAutofocusFlag", payload: !state.autofocusFlag })} />
 
         <View style={[styles.positionCenter, styles.updateButtonPosition]}>
-            <TouchableWithoutFeedback onPress={() => updateUserOptions()}>
+            <TouchableWithoutFeedback onPress={updateUserOptions}>
                 <Text style={styles.updateText}>UPDATE</Text>
             </TouchableWithoutFeedback>
         </View>

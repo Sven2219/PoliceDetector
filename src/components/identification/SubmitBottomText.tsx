@@ -12,7 +12,7 @@ const SubmitButtonText = ({ loginFlag, onPress }: IProps): JSX.Element => {
     }
     return (
         <View style={styles.positionCenter}>
-            <TouchableOpacity onPress={() => onPress()}>
+            <TouchableOpacity onPress={onPress}>
                 <Text style={styles.submitText}>
                     {submitButtonText()}
                 </Text>

@@ -65,13 +65,12 @@ const Map = (): JSX.Element => {
     })
   }
   const messageForLocaction = (): void => {
-    if (Platform.OS === 'android')
-      LocationServicesDialogBox.checkLocationServicesIsEnabled({
-        message: "<h2>Use Location?</h2> \ This app wants to change your device settings:<br/><br/>\ Use GPS for location<br/><br/>",
-        ok: "YES", cancel: "NO"
-      }).then(() => {
-        findMyLocation();
-      })
+    LocationServicesDialogBox.checkLocationServicesIsEnabled({
+      message: "<h2>Use Location?</h2> \ This app wants to change your device settings:<br/><br/>\ Use GPS for location<br/><br/>",
+      ok: "YES", cancel: "NO"
+    }).then(() => {
+      findMyLocation();
+    })
   }
   const findMyLocation = async (): Promise<void> => {
     try {
@@ -157,7 +156,7 @@ const Map = (): JSX.Element => {
       showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
       mode={dState.settings.mode} undo={() => dispatch({ type: "setShowMarker", payload: false })}
     />
-    , [state.showMarker,dState.settings,dState.fullScreenFlag,state.markerPosition])
+    , [state.showMarker, dState.settings, dState.fullScreenFlag, state.markerPosition])
   return (
     <View style={styles.container}>
       <AnimateToRegionButton mapRef={mapRef} />
