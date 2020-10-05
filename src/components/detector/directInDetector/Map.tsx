@@ -97,7 +97,7 @@ const Map = (): JSX.Element => {
     let distance: number = 0;
     let position: IPosition = { latitude: 0, longitude: 0 };
     if (state.markerPosition.latitude === 0 && state.markerPosition.longitude === 0) {
-      distance = preciseDistance(dState.myPosition, dState.myPosition);
+      distance = 0;
       position = { latitude: dState.myPosition.latitude, longitude: dState.myPosition.longitude };
     }
     else {
@@ -126,7 +126,7 @@ const Map = (): JSX.Element => {
     }
   }
 
-  //this function will be triggered every time when Policeman table is changed(delete or add )
+  //this function will be triggered every time when Policeman table is changed(if any user delete or add item )
   const getAllPoliceman = (): void => {
     let data: IFirebase[] = [];
     database().ref('Policeman').on('value', (snap: any) => {
@@ -157,9 +157,7 @@ const Map = (): JSX.Element => {
       showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
       mode={dState.settings.mode} undo={() => dispatch({ type: "setShowMarker", payload: false })}
     />
-    , [state.showMarker,dState.settings,dState.fullScreenFlag])
-
-
+    , [state.showMarker,dState.settings,dState.fullScreenFlag,state.markerPosition])
   return (
     <View style={styles.container}>
       <AnimateToRegionButton mapRef={mapRef} />

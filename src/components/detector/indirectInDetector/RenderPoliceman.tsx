@@ -44,12 +44,12 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
     }
     const createMessage = (differenceInMinutes: number, differenceInHours: number, differenceInDay: number): string => {
         if (differenceInDay !== 0) {
-            return "before " + differenceInDay + " day";
+            return "Before " + differenceInDay + " day";
         }
         else if (differenceInHours !== 0) {
-            return "before " + differenceInHours + " hours";
+            return "Before " + differenceInHours + " hours";
         }
-        return "before " + differenceInMinutes + " min";
+        return "Before " + differenceInMinutes + " min";
     }
     if (dState.onlyThreeToShow !== null && dState.onlyThreeToShow !== undefined) {
         return (

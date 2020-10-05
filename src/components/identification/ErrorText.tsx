@@ -13,7 +13,7 @@ const ErrorText = ({ translateY, validationError }: IProps): JSX.Element => {
     }
     return (
         <Animated.View style={[styles.errorPosition, styles.positionCenter, { transform: [{ translateY }] }]}>
-            <Text style={{ fontSize: 16, color: isValidColor(validationError) }}>{validationError}</Text>
+            <Text style={[styles.errorText, { color: isValidColor(validationError) }]}>{validationError}</Text>
         </Animated.View>
     )
 }
@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    errorText: {
+        fontSize: 16
     }
 })
 

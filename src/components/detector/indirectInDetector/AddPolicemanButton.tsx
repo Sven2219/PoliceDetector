@@ -13,6 +13,7 @@ interface IProps {
 }
 
 const AddPolicemanButton = ({ onPress, showMarker, mode, fullScreen, undo }: IProps): JSX.Element => {
+    
     const checkText = (): string => {
         return (showMarker ? "SAVE POLICEMAN" : "ADD POLICEMAN");
     }

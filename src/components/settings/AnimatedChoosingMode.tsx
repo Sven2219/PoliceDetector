@@ -37,7 +37,7 @@ const AnimatedChoosingMode = ({ mode, setMode }: IProps): JSX.Element => {
             <View style={styles.tickerContainer}>
                 <Ticker scrollX={scrollX} mapMode={mapMode} mode={mode} />
             </View>
-            <View style={{ padding: RIGHT_PADDING / 2 }}>
+            <View style={styles.flatListContainer}>
                 <Animated.FlatList
                     data={mapMode}
                     horizontal
@@ -90,6 +90,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: -DOT_SIZE,
         left: width / 5
+    },
+    flatListContainer:{
+        padding: RIGHT_PADDING / 2
     }
 })
 

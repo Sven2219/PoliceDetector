@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import FullScreen from '../components/detector/directInDetector/FullScreen';
 import Map from '../components/detector/directInDetector/Map';
 import Notification from '../components/detector/directInDetector/Notificaiton';
@@ -33,7 +33,9 @@ const Detector = ({ navigation }: IProps) => {
             if (dis !== undefined && dis <= 1500) {
                 dispatch({ type: "setNotificationModalFlag", payload: true });
             }
-        } catch (error) { }
+        } catch (error) {
+            console.log(error)
+         }
     }
     //Optimize
 
@@ -43,7 +45,7 @@ const Detector = ({ navigation }: IProps) => {
             mode={state.settings.mode} />
         , [state.fullScreenFlag, state.settings])
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.mainContainer}>
             {FullScreenMemo}
             <DetectorDispatchContext.Provider value={{ dDispatch: dispatch }}>
                 <DetectorStateContext.Provider value={{ dState: state }}>
@@ -55,5 +57,9 @@ const Detector = ({ navigation }: IProps) => {
         </View>
     )
 }
-
+const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1
+    }
+})
 export default Detector;

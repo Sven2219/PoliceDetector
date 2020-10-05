@@ -16,7 +16,7 @@ const Notification = (): JSX.Element | null => {
             if (dis !== undefined) {
                 return dis;
             }
-        } catch (error) { }
+        } catch (error) {  }
         return null;
     }
     return (

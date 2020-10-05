@@ -151,7 +151,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         )
     }
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.mainContainer}>
             <Animated.View style={[styles.titleContainer, styles.positionCenter, { transform: [{ translateY }] }]}>
                 <Text style={styles.titleStyle}>POLICE DETECTOR</Text>
             </Animated.View>
@@ -179,6 +179,9 @@ const Login = ({ navigation }: IProps): JSX.Element => {
 }
 
 const styles = StyleSheet.create({
+    mainContainer:{
+        flex:1
+    },
     positionCenter: {
         flexDirection: 'row',
         justifyContent: 'center',

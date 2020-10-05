@@ -15,7 +15,7 @@ const Dots = ({ scrollX, mapMode }: IProps): JSX.Element => {
     })
 
     return (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.mainContainer}>
             <Animated.View style={[styles.paginationIndicator, { transform: [{ translateX }] }]} />
             {mapMode.map(({ id }) => {
                 return (<View style={styles.dotContainer} key={id}>
@@ -44,6 +44,9 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#a52a2a',
         left: DOT_SIZE + 3
+    },
+    mainContainer:{
+        flexDirection: 'row'
     }
 })
 
