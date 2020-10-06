@@ -22,12 +22,12 @@ const Notification = (): JSX.Element | null => {
     return (
         <Modal transparent={true} visible={dState.notificationModalFlag}>
             <View style={{ backgroundColor: modalColor(dState.settings.mode), flex: 1 }}>
-                <View style={styles.backIconPosition}>
+                <View style={styles.positionCenter}>
                     <MaterialCommunityIcons name="keyboard-backspace" size={60}
                         color={checkTextColorForModal(dState.settings.mode)}
                         onPress={() => dDispatch({ type: "setNotificationModalFlag", payload: false })} />
                 </View>
-                <View style={styles.distanceTextContainer}>
+                <View style={[styles.distanceTextContainer,styles.positionCenter]}>
                     <Text style={styles.distanceTextStyle}>COUNTING DOWN{'\n'}METERS TO THE{'\n'}POLICE = {policeDistance()}m</Text>
                 </View>
             </View>
@@ -37,16 +37,13 @@ const Notification = (): JSX.Element | null => {
 
 const styles = StyleSheet.create({
     distanceTextContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
         height: height / 2,
     },
     distanceTextStyle: {
         fontSize: 30,
         fontWeight: "bold",
     },
-    backIconPosition: {
+    positionCenter: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'

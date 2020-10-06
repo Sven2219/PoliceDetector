@@ -3,7 +3,6 @@ import { Marker, Callout } from 'react-native-maps';
 import { DetectorStateContext } from '../../../context/detector/StateContext';
 import { View, Text, Alert, StyleSheet } from 'react-native';
 import { IFirebase } from '../../../helpers/interface/interfaces';
-import { getDifferenceInMinutes, getDifferenceInHours, getDifferenceInDays } from '../../../helpers/map/functions';
 import Policeman from './Policeman';
 import database from '@react-native-firebase/database';
 import { CALLOUT_HEIGHT, CALLOUT_WIDTH } from '../../../helpers/constants/MapScreenConst';
@@ -26,22 +25,27 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
             }
         ], { cancelable: false })
     }
+
     const formatDifferenceInMinutes = (marker: IFirebase): string => {
         //I don't like to use moment.js because it is huge library
         //From their documentation =>In most cases, you should not choose Moment for new projects.However there are some possible reasons you might want to keep using it
-        const date1 = new Date(marker.date.year, marker.date.month - 1, marker.date.day, marker.date.hours, marker.date.minutes);
-        const date2 = new Date();
-        const differenceInMinutes = Math.floor(getDifferenceInMinutes(date1, date2));
+        const date1:Date = new Date(marker.date.year, marker.date.month - 1, marker.date.day, marker.date.hours, marker.date.minutes);
+        const date2:Date = new Date();
+        //@ts-ignore
+        const diffInMs = Math.abs(date2 - date1);
+        const differenceInMinutes = Math.floor(diffInMs/(1000 * 60));
         let differenceInHours = 0;
         let differenceInDay = 0;
+
         if (differenceInMinutes >= 60) {
-            differenceInHours = Math.floor(getDifferenceInHours(date1, date2));
+            differenceInHours = Math.floor(diffInMs/(1000 * 60 * 60));
             if (differenceInHours >= 24) {
-                differenceInDay = Math.floor(getDifferenceInDays(date1, date2));
+                differenceInDay = Math.floor(diffInMs/ (1000 * 60 * 60 * 24));
             }
         }
         return createMessage(differenceInMinutes, differenceInHours, differenceInDay)
     }
+
     const createMessage = (differenceInMinutes: number, differenceInHours: number, differenceInDay: number): string => {
         if (differenceInDay !== 0) {
             return "Before " + differenceInDay + " day";

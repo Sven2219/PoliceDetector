@@ -21,7 +21,7 @@ export const UNDO_BUTTON_BOTTOM = -3;
 
 
 //callout dim
-export const CALLOUT_WIDTH = 60;
+export const CALLOUT_WIDTH = 70;
 export const CALLOUT_HEIGHT = 50;
 
 

@@ -9,6 +9,7 @@ interface IProps {
 }
 
 const SplashScreen = ({ navigation }: IProps): JSX.Element => {
+    
     useEffect(() => {
         //The goal is to show image for 3 sec
         setTimeout(() => {
@@ -22,6 +23,7 @@ const SplashScreen = ({ navigation }: IProps): JSX.Element => {
             })
         }, 3000)
     }, [])
+
     return (
         <View style={styles.containerStyle}>
             <StatusBar backgroundColor="#000" />

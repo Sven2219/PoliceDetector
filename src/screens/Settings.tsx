@@ -52,8 +52,9 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             console.log(error)
         }
     }
-    //In this screen, useMemo might do more harm than good
-    
+
+    //In this screen, useMemo might do more harm than good because It will take up memory but there are no performance issues
+
     return (<ScrollView>
         <View style={styles.titleContainer}>
             <Text style={styles.titleStyle}>SETTINGS</Text>

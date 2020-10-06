@@ -56,7 +56,7 @@ const Map = (): JSX.Element => {
 
   //opening full screen
   const checkUserSettings = (): void => {
-    //I use on because when user change map mode or another settings it will automaticly update
+    //I use on because when user change map mode or another setting it will automaticly update
     database().ref('Users/' + auth().currentUser?.uid).on('value', (snap: any) => {
       const result = snap.val();
       if (result) {
@@ -133,7 +133,7 @@ const Map = (): JSX.Element => {
       if (data !== null && data !== undefined) {
         data = Object.values(data);
         //O(n) complexity
-        data = data.filter((el) => el !== null);
+        data = data.filter((el:IFirebase) => el !== null);
         dDispatch({ type: "setAllPoliceman", payload: data });
       }
     })
@@ -157,6 +157,8 @@ const Map = (): JSX.Element => {
       mode={dState.settings.mode} undo={() => dispatch({ type: "setShowMarker", payload: false })}
     />
     , [state.showMarker, dState.settings, dState.fullScreenFlag, state.markerPosition])
+
+  
   return (
     <View style={styles.container}>
       <AnimateToRegionButton mapRef={mapRef} />

@@ -13,6 +13,7 @@ import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-navigation';
 import Spinner from '../components/identification/Spinner';
+import GlobalError from '../components/identification/GlobalError';
 
 //The goal is to create validation with regular expression not with yup/formik or something like that
 interface IProps {
@@ -61,9 +62,11 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         }
     }
     const validatePassword = (password: string): void => {
+
         const validateNumbers = password.match(/(?=(?:\D*\d){2,})/g);
         const validateWords = password.match(/(?=(?:[^A-Z]*[A-Z]){2,})/g);
         const validateLength = password.match(/^(?=\w{6,}$)/gi);
+        
         if (!validateNumbers) {
             dispatch({ type: "setValidatePassword", password: password, passwordValidationError: "Password require at least 2 number" })
         }
@@ -105,15 +108,17 @@ const Login = ({ navigation }: IProps): JSX.Element => {
     }
     const identificate = async (): Promise<void> => {
         dispatch({ type: "setSpinnerFlag", payload: true });
+        //Login
         if (state.loginFlag && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
             try {
                 await auth().signInWithEmailAndPassword(state.email, state.password);
                 dispatch({ type: "clear" })
                 navigation.navigate('TabBar')
             } catch (error) {
-                dispatch({ type: "setGlobalError", payload: "Email or password are incorrect" })
+                dispatch({ type: "setGlobalError", payload: "Email or password is incorrect" })
             }
         }
+        //Register
         else if (!state.loginFlag && state.password === state.confirmPassword && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
             try {
                 await auth().createUserWithEmailAndPassword(state.email, state.password);
@@ -132,14 +137,9 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             dispatch({ type: "setGlobalError", payload: "You have not met all the conditions" })
         }
     }
-    const showGlobalError = (): JSX.Element | null => {
-        if (state.globalError !== "") {
-            return (
-                <Text style={styles.globalError}>{state.globalError}</Text>
-            )
-        }
-        return null;
-    }
+
+
+
     const showButtonOrSpinner = (): JSX.Element => {
         if (state.spinnerFlag) {
             return (
@@ -150,6 +150,8 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             <SubmitButtonText loginFlag={state.loginFlag} onPress={() => identificate()} />
         )
     }
+
+
     return (
         <View style={styles.mainContainer}>
             <Animated.View style={[styles.titleContainer, styles.positionCenter, { transform: [{ translateY }] }]}>
@@ -170,7 +172,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             <ErrorText translateY={translateY} validationError={state.passwordValidationError} />
             {showConfirmPassword()}
             <View style={styles.positionCenter}>
-                {showGlobalError()}
+                <GlobalError globalError={state.globalError}/>
             </View>
             {showButtonOrSpinner()}
             {bottomText()}
@@ -204,11 +206,6 @@ const styles = StyleSheet.create({
         height: IMAGE_HEIGHT,
         transform: [{ rotate: '55deg' }]
     },
-    globalError: {
-        fontSize: 17,
-        fontFamily: 'Merriweather-Regular',
-        color: '#b22222'
-    }
 })
 
 export default Login;
