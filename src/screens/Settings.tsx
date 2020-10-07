@@ -37,12 +37,13 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             console.log(error)
         }
     }
-    const updateUserOptions = (): void => {
-        database().ref('Users/' + auth().currentUser?.uid).update({
+    const updateUserOptions = async(): Promise<void> => {
+        await database().ref('Users/' + auth().currentUser?.uid).update({
             autofocusFlag: state.autofocusFlag,
             notificationFlag: state.notificationFlag,
             mode: state.mode
-        }).then(() => Alert.alert('You have successfully updated settings'))
+        })
+        Alert.alert('You have successfully updated settings')
     }
     const logOut = async (): Promise<void> => {
         try {

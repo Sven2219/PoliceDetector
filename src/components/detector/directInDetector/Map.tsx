@@ -36,12 +36,19 @@ const Map = (): JSX.Element => {
     //listener
     getAllPoliceman();
   }, [])
+
+
   useEffect(() => {
     if (dState.settings.autofocusFlag) {
       animateToRegion(1000, dState.myPosition, mapRef)
     }
-  }, [dState.myPosition.latitude || dState.myPosition.longitude])
+  }, [dState.myPosition.latitude.toFixed(3) || dState.myPosition.longitude.toFixed(3)])
 
+
+  //tip**** 
+  //Posto je ovo dState.allPoliceman stanje(state) on se nece svaki put rekreirat kad se bilo koje drugo stanje promjeni
+  //i zato ga mozemo stavit kao argument u useEffectu() ista situacija je dole kod useMemo() predajem mu objekt settings
+  //da nije state to nebi radilo ispravno 
   useEffect(() => {
     if (dState.allPoliceman) {
       //it is called every time when policeman table or user position changes
@@ -49,9 +56,10 @@ const Map = (): JSX.Element => {
     }
   }, [dState.allPoliceman])
 
+  //With toFixed(3) it is not refreshing constantly// it refresh every 20 meter something like that
   useEffect(() => {
     findThreeNearestPoliceman();
-  }, [dState.myPosition.latitude || dState.myPosition.longitude])
+  }, [dState.myPosition.latitude.toFixed(3) || dState.myPosition.longitude.toFixed(3)])
 
 
   //opening full screen
@@ -64,13 +72,14 @@ const Map = (): JSX.Element => {
       }
     })
   }
-  const messageForLocaction = (): void => {
-    LocationServicesDialogBox.checkLocationServicesIsEnabled({
+  const messageForLocaction = async (): Promise<void> => {
+
+    await LocationServicesDialogBox.checkLocationServicesIsEnabled({
       message: "<h2>Use Location?</h2> \ This app wants to change your device settings:<br/><br/>\ Use GPS for location<br/><br/>",
       ok: "YES", cancel: "NO"
-    }).then(() => {
-      findMyLocation();
     })
+    findMyLocation();
+
   }
   const findMyLocation = async (): Promise<void> => {
     try {
@@ -125,7 +134,10 @@ const Map = (): JSX.Element => {
     }
   }
 
-  //this function will be triggered every time when Policeman table is changed(if any user delete or add item )
+  //This function will be triggered every time when Policeman table is changed(if any user delete or add item )
+  //The answer on:"Why I need all policeman?"
+  //Because when user changes his location I need to find the nearest three policeman
+  //And I can do it only if I saved all policeman
   const getAllPoliceman = (): void => {
     let data: IFirebase[] = [];
     database().ref('Policeman').on('value', (snap: any) => {
@@ -133,7 +145,7 @@ const Map = (): JSX.Element => {
       if (data !== null && data !== undefined) {
         data = Object.values(data);
         //O(n) complexity
-        data = data.filter((el:IFirebase) => el !== null);
+        data = data.filter((el: IFirebase) => el !== null);
         dDispatch({ type: "setAllPoliceman", payload: data });
       }
     })
@@ -158,7 +170,7 @@ const Map = (): JSX.Element => {
     />
     , [state.showMarker, dState.settings, dState.fullScreenFlag, state.markerPosition])
 
-  
+
   return (
     <View style={styles.container}>
       <AnimateToRegionButton mapRef={mapRef} />

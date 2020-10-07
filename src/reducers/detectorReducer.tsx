@@ -5,6 +5,7 @@ export interface IState {
     fullScreenFlag: boolean;
     settings: ISettings;
     allPoliceman: IFirebase[];
+
     onlyThreeToShow: IFirebase[];
     notificationModalFlag: boolean;
 }

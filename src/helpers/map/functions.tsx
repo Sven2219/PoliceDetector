@@ -40,6 +40,7 @@ export const preciseDistance = (markerPosition: IPosition, myPosition: IPosition
 
 export const calculatingDistance = (data: IFirebase[], myPosition: IPosition) => {
     //O(n);
+    //returning new array not modifying data
     return data.map((el: IFirebase) => {
         return ({ ...el, distance: preciseDistance({ longitude: el.longitude, latitude: el.latitude }, myPosition) })
     })
