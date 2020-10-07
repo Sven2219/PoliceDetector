@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useReducer, useRef } from 'react';
 import MapView, { MapEvent, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Alert, Platform, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { width, height, LATITUDE_DELTA, LONGITUDE_DELTA } from '../../../helpers/constants/MapScreenConst';
 import { DetectorStateContext } from '../../../context/detector/StateContext';
 import { DetectorDispatchContext } from '../../../context/detector/DispatchContext';
@@ -42,25 +42,25 @@ const Map = (): JSX.Element => {
     if (dState.settings.autofocusFlag) {
       animateToRegion(1000, dState.myPosition, mapRef)
     }
-  }, [dState.myPosition.latitude.toFixed(3) || dState.myPosition.longitude.toFixed(3)])
+  }, [dState.myPosition.latitude.toFixed(3), dState.myPosition.longitude.toFixed(3)])
 
 
   //tip**** 
+  //Hrv
   //Posto je ovo dState.allPoliceman stanje(state) on se nece svaki put rekreirat kad se bilo koje drugo stanje promjeni
   //i zato ga mozemo stavit kao argument u useEffectu() ista situacija je dole kod useMemo() predajem mu objekt settings
   //da nije state to nebi radilo ispravno 
-  useEffect(() => {
-    if (dState.allPoliceman) {
-      //it is called every time when policeman table or user position changes
-      findThreeNearestPoliceman();
-    }
-  }, [dState.allPoliceman])
 
   //With toFixed(3) it is not refreshing constantly// it refresh every 20 meter something like that
+  //Hrv:
+  //Izdvojio sam ovo u zaseban useEffect iako ima slicne parametere kao ovaj iznad
+  //jer ako korisnik obrise ili doda policajca ovaj useEffect ce se okinut
   useEffect(() => {
-    findThreeNearestPoliceman();
-  }, [dState.myPosition.latitude.toFixed(3) || dState.myPosition.longitude.toFixed(3)])
-
+    if (dState.allPoliceman.length !== 0) {
+      console.log(dState.allPoliceman)
+      findThreeNearestPoliceman();
+    }
+  }, [dState.myPosition.latitude.toFixed(3), dState.myPosition.longitude.toFixed(3), dState.allPoliceman])
 
   //opening full screen
   const checkUserSettings = (): void => {

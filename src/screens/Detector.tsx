@@ -27,7 +27,7 @@ const Detector = ({ navigation }: IProps) => {
         if (state.settings.notificationFlag && state.onlyThreeToShow) {
             startCountdown();
         }
-    }, [state.myPosition.longitude.toFixed(3) || state.myPosition.latitude.toFixed(3)])
+    }, [state.myPosition.longitude.toFixed(3), state.myPosition.latitude.toFixed(3)])
 
     const startCountdown = (): void => {
         try {
@@ -37,7 +37,7 @@ const Detector = ({ navigation }: IProps) => {
             }
         } catch (error) {
             console.log(error)
-         }
+        }
     }
     //Optimize
     //[state.settings] because I need to update color of icon depend on settings(in useMemo second arg)
