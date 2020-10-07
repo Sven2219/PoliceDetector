@@ -21,7 +21,8 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
                 style: "cancel"
             }, {
                 text: "Delete",
-                onPress: () => database().ref('Policeman/' + marker.id).remove(),
+
+                onPress: () => database().ref(`Policeman/${marker.id}`).remove(),
             }
         ], { cancelable: false })
     }
@@ -29,18 +30,18 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
     const formatDifferenceInMinutes = (marker: IFirebase): string => {
         //I don't like to use moment.js because it is huge library
         //From their documentation =>In most cases, you should not choose Moment for new projects.However there are some possible reasons you might want to keep using it
-        const date1:Date = new Date(marker.date.year, marker.date.month - 1, marker.date.day, marker.date.hours, marker.date.minutes);
-        const date2:Date = new Date();
+        const date1: Date = new Date(marker.date.year, marker.date.month - 1, marker.date.day, marker.date.hours, marker.date.minutes);
+        const date2: Date = new Date();
         //@ts-ignore
         const diffInMs = Math.abs(date2 - date1);
-        const differenceInMinutes = Math.floor(diffInMs/(1000 * 60));
+        const differenceInMinutes = Math.floor(diffInMs / (1000 * 60));
         let differenceInHours = 0;
         let differenceInDay = 0;
 
         if (differenceInMinutes >= 60) {
-            differenceInHours = Math.floor(diffInMs/(1000 * 60 * 60));
+            differenceInHours = Math.floor(diffInMs / (1000 * 60 * 60));
             if (differenceInHours >= 24) {
-                differenceInDay = Math.floor(diffInMs/ (1000 * 60 * 60 * 24));
+                differenceInDay = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
             }
         }
         return createMessage(differenceInMinutes, differenceInHours, differenceInDay)
@@ -55,7 +56,7 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
         }
         return "Before " + differenceInMinutes + " min";
     }
-    
+
     if (dState.onlyThreeToShow !== null && dState.onlyThreeToShow !== undefined) {
         return (
             dState.onlyThreeToShow.map((marker: IFirebase, index: number) => (

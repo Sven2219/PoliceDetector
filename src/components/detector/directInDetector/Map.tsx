@@ -18,6 +18,8 @@ import RenderPoliceman from '../indirectInDetector/RenderPoliceman';
 import AnimateToRegionButton from '../indirectInDetector/AnimateToRegionButton';
 
 const Map = (): JSX.Element => {
+  //d === d stand for detector
+  //dState and dDispatch === detector state and detector dispatch
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
   const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
@@ -36,7 +38,6 @@ const Map = (): JSX.Element => {
     //listener
     getAllPoliceman();
   }, [])
-
 
   useEffect(() => {
     if (dState.settings.autofocusFlag) {
@@ -57,7 +58,6 @@ const Map = (): JSX.Element => {
   //jer ako korisnik obrise ili doda policajca ovaj useEffect ce se okinut
   useEffect(() => {
     if (dState.allPoliceman.length !== 0) {
-      console.log(dState.allPoliceman)
       findThreeNearestPoliceman();
     }
   }, [dState.myPosition.latitude.toFixed(3), dState.myPosition.longitude.toFixed(3), dState.allPoliceman])
@@ -65,13 +65,15 @@ const Map = (): JSX.Element => {
   //opening full screen
   const checkUserSettings = (): void => {
     //I use on because when user change map mode or another setting it will automaticly update
-    database().ref('Users/' + auth().currentUser?.uid).on('value', (snap: any) => {
+    
+    database().ref(`Users/${auth().currentUser?.uid}`).on('value', (snap: any) => {
       const result = snap.val();
       if (result) {
         dDispatch({ type: "setSettings", payload: snap.val() })
       }
     })
   }
+  //message if user doesn't have turned on location
   const messageForLocaction = async (): Promise<void> => {
 
     await LocationServicesDialogBox.checkLocationServicesIsEnabled({
@@ -92,17 +94,15 @@ const Map = (): JSX.Element => {
       console.log(error)
     }
   }
-  const countPoliceman = (): void => {
+  const countPoliceman = async(): Promise<void> => {
     let lastIndex: string | null = '';
-    database().ref('Policeman').limitToLast(1).once('child_added').then((snap) => {
-      lastIndex = snap.key;
-      if (lastIndex) {
-        dispatch({ type: "setPoliceCounter", payload: parseInt(lastIndex) + 1 });
-      }
-    })
+    const result = await database().ref('Policeman').limitToLast(1).once('child_added')
+    lastIndex = result.key;
+    if (lastIndex) {
+      dispatch({ type: "setPoliceCounter", payload: parseInt(lastIndex) + 1 });
+    }
   }
-
-
+  
   const policemanDistance = (): number => {
     if (state.markerPosition.latitude === 0 && state.markerPosition.longitude === 0) {
       return 0;
@@ -114,7 +114,8 @@ const Map = (): JSX.Element => {
 
   const savePoliceman = (position: IPosition): void => {
     const date: Date = new Date();
-    database().ref('Policeman/' + state.policeCounter).set({
+    
+    database().ref(`Policeman/${state.policeCounter}`).set({
       latitude: position.latitude,
       longitude: position.longitude,
       date: {

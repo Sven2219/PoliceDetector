@@ -16,8 +16,10 @@ interface IProps {
 }
 
 const Settings = ({ navigation }: IProps): JSX.Element => {
-    const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, { autofocusFlag: false, 
-        notificationFlag: false, mode: "classic" })
+    const [state, dispatch] = useReducer<React.Reducer<IState, Actions>>(reducer, {
+        autofocusFlag: false,
+        notificationFlag: false, mode: "classic"
+    })
 
     useEffect(() => {
         setUserOptions()
@@ -26,7 +28,8 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
     //The data is needed only once
     const setUserOptions = async (): Promise<void> => {
         try {
-            const result = (await database().ref('Users/' + auth().currentUser?.uid).once('value')).val();
+
+            const result = (await database().ref(`Users/${auth().currentUser?.uid}`).once('value')).val();
             if (result) {
                 dispatch({
                     type: "setAllSettings", notificationFlag: result.notificationFlag, autofocusFlag: result.autofocusFlag,
@@ -37,8 +40,8 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
             console.log(error)
         }
     }
-    const updateUserOptions = async(): Promise<void> => {
-        await database().ref('Users/' + auth().currentUser?.uid).update({
+    const updateUserOptions = async (): Promise<void> => {
+        await database().ref(`Users/${auth().currentUser?.uid}`).update({
             autofocusFlag: state.autofocusFlag,
             notificationFlag: state.notificationFlag,
             mode: state.mode

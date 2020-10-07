@@ -35,19 +35,19 @@ const Login = ({ navigation }: IProps): JSX.Element => {
     })
 
     useEffect(() => {
-        Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
-        Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+        Keyboard.addListener("keyboardDidShow", keyboardDidShow);
+        Keyboard.addListener("keyboardDidHide", keyboardDidHide);
         // cleanup function
         return () => {
-            Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
-            Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+            Keyboard.removeListener("keyboardDidShow", keyboardDidShow);
+            Keyboard.removeListener("keyboardDidHide", keyboardDidHide);
         };
     }, []);
     //togle animation depend on keyboard visibility
-    const _keyboardDidShow = (): void => {
+    const keyboardDidShow = (): void => {
         dispatch({ type: "setToggled", payload: true })
     }
-    const _keyboardDidHide = (): void => {
+    const keyboardDidHide = (): void => {
         dispatch({ type: "setToggled", payload: false })
     };
 
@@ -80,7 +80,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             dispatch({ type: "setValidatePassword", password: password, passwordValidationError: "Password is valid" });
         }
     }
-
+    //It is just text input for confirming password
     const showConfirmPassword = (): JSX.Element | null => {
         if (!state.loginFlag) {
             return (
@@ -93,6 +93,8 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         }
         return null;
     }
+
+
     const bottomText = (): JSX.Element => {
         if (!state.loginFlag) {
             return (
@@ -120,7 +122,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
     const register = async () => {
         try {
             await auth().createUserWithEmailAndPassword(state.email, state.password);
-            await database().ref('Users/' + auth().currentUser?.uid).set({
+            await database().ref(`Users/${auth().currentUser?.uid}`).set({
                 autofocusFlag: false,
                 notificationFlag: false,
                 mode: "classic"
