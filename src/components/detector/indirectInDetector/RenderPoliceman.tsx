@@ -55,6 +55,7 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
         }
         return "Before " + differenceInMinutes + " min";
     }
+    
     if (dState.onlyThreeToShow !== null && dState.onlyThreeToShow !== undefined) {
         return (
             dState.onlyThreeToShow.map((marker: IFirebase, index: number) => (

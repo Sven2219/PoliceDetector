@@ -101,38 +101,50 @@ const Map = (): JSX.Element => {
       }
     })
   }
-  const saveLocationOfPoliceman = (): void => {
-    let distance: number = 0;
-    let position: IPosition = { latitude: 0, longitude: 0 };
+
+
+  const policemanDistance = (): number => {
     if (state.markerPosition.latitude === 0 && state.markerPosition.longitude === 0) {
-      distance = 0;
-      position = { latitude: dState.myPosition.latitude, longitude: dState.myPosition.longitude };
+      return 0;
     }
     else {
-      distance = preciseDistance(state.markerPosition, dState.myPosition)
+      return preciseDistance(state.markerPosition, dState.myPosition)
+    }
+  }
+
+  const savePoliceman = (position: IPosition): void => {
+    const date: Date = new Date();
+    database().ref('Policeman/' + state.policeCounter).set({
+      latitude: position.latitude,
+      longitude: position.longitude,
+      date: {
+        minutes: date.getMinutes(),
+        hours: date.getHours(),
+        day: date.getDate(),
+        month: date.getMonth() + 1,
+        year: date.getFullYear()
+      },
+      id: state.policeCounter
+    })
+    dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 }, showMarker: false, policeCounter: state.policeCounter + 1 })
+  }
+
+  //pressing the save button
+  const handleButtonPress = (): void => {
+    let distance: number = policemanDistance();
+    let position: IPosition = { latitude: dState.myPosition.latitude, longitude: dState.myPosition.longitude };
+    if (distance !== 0) {
       position = { latitude: state.markerPosition.latitude, longitude: state.markerPosition.longitude }
     }
     //User can only put policeman in radius of 3000m
     if (distance <= 3000) {
-      const date: Date = new Date();
-      database().ref('Policeman/' + state.policeCounter).set({
-        latitude: position.latitude,
-        longitude: position.longitude,
-        date: {
-          minutes: date.getMinutes(),
-          hours: date.getHours(),
-          day: date.getDate(),
-          month: date.getMonth() + 1,
-          year: date.getFullYear()
-        },
-        id: state.policeCounter
-      })
-      dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 }, showMarker: false, policeCounter: state.policeCounter + 1 })
+      savePoliceman(position);
     }
     else {
       Alert.alert("Request refused", "You can only post a police officer within a 3-mile radius");
     }
   }
+
 
   //This function will be triggered every time when Policeman table is changed(if any user delete or add item )
   //The answer on:"Why I need all policeman?"
@@ -145,6 +157,7 @@ const Map = (): JSX.Element => {
       if (data !== null && data !== undefined) {
         data = Object.values(data);
         //O(n) complexity
+        //because when I delete a policeman it will be null
         data = data.filter((el: IFirebase) => el !== null);
         dDispatch({ type: "setAllPoliceman", payload: data });
       }
@@ -164,7 +177,7 @@ const Map = (): JSX.Element => {
 
   //Optimize
   const AddPolicemanButtonMemo = useMemo(() =>
-    <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : saveLocationOfPoliceman() }}
+    <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : handleButtonPress() }}
       showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
       mode={dState.settings.mode} undo={() => dispatch({ type: "setShowMarker", payload: false })}
     />

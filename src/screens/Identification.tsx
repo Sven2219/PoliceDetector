@@ -66,7 +66,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         const validateNumbers = password.match(/(?=(?:\D*\d){2,})/g);
         const validateWords = password.match(/(?=(?:[^A-Z]*[A-Z]){2,})/g);
         const validateLength = password.match(/^(?=\w{6,}$)/gi);
-        
+
         if (!validateNumbers) {
             dispatch({ type: "setValidatePassword", password: password, passwordValidationError: "Password require at least 2 number" })
         }
@@ -106,39 +106,46 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         )
 
     }
-    const identificate = async (): Promise<void> => {
+
+    const login = async () => {
+        try {
+            await auth().signInWithEmailAndPassword(state.email, state.password);
+            dispatch({ type: "clear" })
+            navigation.navigate('TabBar')
+        } catch (error) {
+            dispatch({ type: "setGlobalError", payload: "Email or password is incorrect" })
+        }
+    }
+
+    const register = async () => {
+        try {
+            await auth().createUserWithEmailAndPassword(state.email, state.password);
+            await database().ref('Users/' + auth().currentUser?.uid).set({
+                autofocusFlag: false,
+                notificationFlag: false,
+                mode: "classic"
+            })
+            dispatch({ type: "clear" })
+            navigation.navigate('TabBar')
+        } catch (error) {
+            dispatch({ type: "setGlobalError", payload: "Email is already in use" })
+        }
+    }
+
+    const identificate = (): void => {
         dispatch({ type: "setSpinnerFlag", payload: true });
         //Login
         if (state.loginFlag && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
-            try {
-                await auth().signInWithEmailAndPassword(state.email, state.password);
-                dispatch({ type: "clear" })
-                navigation.navigate('TabBar')
-            } catch (error) {
-                dispatch({ type: "setGlobalError", payload: "Email or password is incorrect" })
-            }
+            login();
         }
         //Register
         else if (!state.loginFlag && state.password === state.confirmPassword && state.emailValidationError === "Email is valid" && state.passwordValidationError === "Password is valid") {
-            try {
-                await auth().createUserWithEmailAndPassword(state.email, state.password);
-                await database().ref('Users/' + auth().currentUser?.uid).set({
-                    autofocusFlag: false,
-                    notificationFlag: false,
-                    mode: "classic"
-                })
-                dispatch({ type: "clear" })
-                navigation.navigate('TabBar')
-            } catch (error) {
-                dispatch({ type: "setGlobalError", payload: "Email is already in use" })
-            }
+            register();
         }
         else {
             dispatch({ type: "setGlobalError", payload: "You have not met all the conditions" })
         }
     }
-
-
 
     const showButtonOrSpinner = (): JSX.Element => {
         if (state.spinnerFlag) {
@@ -172,7 +179,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             <ErrorText translateY={translateY} validationError={state.passwordValidationError} />
             {showConfirmPassword()}
             <View style={styles.positionCenter}>
-                <GlobalError globalError={state.globalError}/>
+                <GlobalError globalError={state.globalError} />
             </View>
             {showButtonOrSpinner()}
             {bottomText()}
@@ -181,8 +188,8 @@ const Login = ({ navigation }: IProps): JSX.Element => {
 }
 
 const styles = StyleSheet.create({
-    mainContainer:{
-        flex:1
+    mainContainer: {
+        flex: 1
     },
     positionCenter: {
         flexDirection: 'row',
