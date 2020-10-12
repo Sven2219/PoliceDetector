@@ -15,7 +15,7 @@ import { NavigationParams, NavigationScreenProp, NavigationState } from 'react-n
 import Spinner from '../components/identification/Spinner';
 import GlobalError from '../components/identification/GlobalError';
 
-//The goal is to create validation with regular expression not with yup/formik or something like that
+//Cilj je napraviti validaciju pomocu Regexa, a ne koristiti gotove stvari kao formik 
 interface IProps {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
@@ -27,7 +27,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         loginFlag: false, toggled: false, showPassword: false,
         showConfirmPassword: false, globalError: "", spinnerFlag: false
     });
-    //transition depend on toggle state
+    //Tranzicija koja ovisi o toggled
     const transition = useTransition(state.toggled, { duration: 1000 });
     const translateY = interpolate(transition, {
         inputRange: [0, 1],
@@ -43,7 +43,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             Keyboard.removeListener("keyboardDidHide", keyboardDidHide);
         };
     }, []);
-    //togle animation depend on keyboard visibility
+    //Animacija ovisna o vidljivosti tipkovnice
     const keyboardDidShow = (): void => {
         dispatch({ type: "setToggled", payload: true })
     }
@@ -80,7 +80,8 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             dispatch({ type: "setValidatePassword", password: password, passwordValidationError: "Password is valid" });
         }
     }
-    //It is just text input for confirming password
+    
+    
     const showConfirmPassword = (): JSX.Element | null => {
         if (!state.loginFlag) {
             return (

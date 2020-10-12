@@ -20,12 +20,11 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
         autofocusFlag: false,
         notificationFlag: false, mode: "classic"
     })
-
     useEffect(() => {
         setUserOptions()
     }, [])
-    //I used once because I don't need to listen for changes
-    //The data is needed only once
+    /*Koristim once jer su podaci potrebni samo jednom
+    once ce za razliku od on slusat-pokupit podatke-prestat slusat */
     const setUserOptions = async (): Promise<void> => {
         try {
 
@@ -57,8 +56,8 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
         }
     }
 
-    //In this screen, useMemo might do more harm than good because It will take up memory but there are no performance issues
-
+    //U ovom zaslonu useMemo bi mogao uciniti vise stete nego dobrog jer kada se on koristi zauzima memoriju
+    //Jer radi na nacin da pamti prethodno stanje
     return (<ScrollView>
         <View style={styles.titleContainer}>
             <Text style={styles.titleStyle}>SETTINGS</Text>

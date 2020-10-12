@@ -31,14 +31,15 @@ const Map = (): JSX.Element => {
   useEffect(() => {
     //listener
     checkUserSettings();
-    //only once
+    //samo jednom
     messageForLocaction();
-    //only once
+    //samo jednom
     countPoliceman();
     //listener
     getAllPoliceman();
   }, [])
 
+  //ovo radi samo u slucaju ako korisnik ima ukljuceno autofokusiranje
   useEffect(() => {
     if (dState.settings.autofocusFlag) {
       animateToRegion(1000, dState.myPosition, mapRef)
@@ -46,26 +47,21 @@ const Map = (): JSX.Element => {
   }, [dState.myPosition.latitude.toFixed(3), dState.myPosition.longitude.toFixed(3)])
 
 
-  //tip**** 
-  //Hrv
-  //Posto je ovo dState.allPoliceman stanje(state) on se nece svaki put rekreirat kad se bilo koje drugo stanje promjeni
-  //i zato ga mozemo stavit kao argument u useEffectu() ista situacija je dole kod useMemo() predajem mu objekt settings
-  //da nije state to nebi radilo ispravno 
-
-  //With toFixed(3) it is not refreshing constantly// it refresh every 20 meter something like that
-  //Hrv:
-  //Izdvojio sam ovo u zaseban useEffect iako ima slicne parametere kao ovaj iznad
-  //jer ako korisnik obrise ili doda policajca ovaj useEffect ce se okinut
+  /*Kao argument useEffectu se predaje dState.allPoliceman to ce radit jer se stanje nece svaki puta ponovo rekreirat
+  kada se promjeni bilo koje drugo stanje*/
+  /*toFixed(3) omogucuje da se ne okida konstantno na svaku promjenu lokacije
+  nego kad korisnik prede 20 metara ili vise nisam siguran*/
   useEffect(() => {
     if (dState.allPoliceman.length !== 0) {
       findThreeNearestPoliceman();
     }
   }, [dState.myPosition.latitude.toFixed(3), dState.myPosition.longitude.toFixed(3), dState.allPoliceman])
 
-  //opening full screen
+
   const checkUserSettings = (): void => {
-    //I use on because when user change map mode or another setting it will automaticly update
-    
+    /*Koristim on jer ce se to okinut svaki put kada se promjene postavke
+    on radi na principu da stalno slusa promjene
+    */
     database().ref(`Users/${auth().currentUser?.uid}`).on('value', (snap: any) => {
       const result = snap.val();
       if (result) {
@@ -73,7 +69,7 @@ const Map = (): JSX.Element => {
       }
     })
   }
-  //message if user doesn't have turned on location
+  //Okida se samo ako korisnik nema ukljucenu lokaciju.
   const messageForLocaction = async (): Promise<void> => {
 
     await LocationServicesDialogBox.checkLocationServicesIsEnabled({
@@ -104,6 +100,7 @@ const Map = (): JSX.Element => {
   }
   
   const policemanDistance = (): number => {
+
     if (state.markerPosition.latitude === 0 && state.markerPosition.longitude === 0) {
       return 0;
     }
@@ -130,14 +127,14 @@ const Map = (): JSX.Element => {
     dispatch({ type: "setMarkerPosition", payload: { latitude: 0, longitude: 0 }, showMarker: false, policeCounter: state.policeCounter + 1 })
   }
 
-  //pressing the save button
+
   const handleButtonPress = (): void => {
     let distance: number = policemanDistance();
     let position: IPosition = { latitude: dState.myPosition.latitude, longitude: dState.myPosition.longitude };
     if (distance !== 0) {
       position = { latitude: state.markerPosition.latitude, longitude: state.markerPosition.longitude }
     }
-    //User can only put policeman in radius of 3000m
+    //S ovim se sprijecava da korisnik moze dodati policajca van radijusa od 3km 
     if (distance <= 3000) {
       savePoliceman(position);
     }
@@ -147,10 +144,7 @@ const Map = (): JSX.Element => {
   }
 
 
-  //This function will be triggered every time when Policeman table is changed(if any user delete or add item )
-  //The answer on:"Why I need all policeman?"
-  //Because when user changes his location I need to find the nearest three policeman
-  //And I can do it only if I saved all policeman
+  /*Ovo se okida svaki puta kada se promjeni tablica policajci (brisanje ili dodavanje) */
   const getAllPoliceman = (): void => {
     let data: IFirebase[] = [];
     database().ref('Policeman').on('value', (snap: any) => {
@@ -158,12 +152,18 @@ const Map = (): JSX.Element => {
       if (data !== null && data !== undefined) {
         data = Object.values(data);
         //O(n) complexity
-        //because when I delete a policeman it will be null
+        //Filtrira se jer ako korisnik obrise npr 5 policajca a ima ih 10 na 5 policajcu ce bit null
         data = data.filter((el: IFirebase) => el !== null);
         dDispatch({ type: "setAllPoliceman", payload: data });
       }
     })
   }
+
+  /*Kako ovo radi ? 
+  Prvo se prolazi kroz sve policajce (mpa metodom) i dodaje se novo svojstvo distance
+  te se onda sortira prema distance
+  i na kraju uzmu se prva tri pomocu slice metode
+  */
   const findThreeNearestPoliceman = (): void => {
     let value: IFirebase[] = [];
     try {
@@ -176,7 +176,7 @@ const Map = (): JSX.Element => {
     }
   }
 
-  //Optimize
+  //Optimiziranje pomocu useMemo
   const AddPolicemanButtonMemo = useMemo(() =>
     <AddPolicemanButton onPress={() => { !state.showMarker ? dispatch({ type: "setShowMarker", payload: true }) : handleButtonPress() }}
       showMarker={state.showMarker} fullScreen={dState.fullScreenFlag}
@@ -210,6 +210,7 @@ const Map = (): JSX.Element => {
       >
         <RenderPoliceman />
 
+      
         <AddNewMarker onDragEnd={(e: MapEvent<{}>) => dispatch({ type: "setMarkerPosition", payload: { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude } })}
           showMarker={state.showMarker} />
       </MapView>

@@ -40,7 +40,7 @@ export const preciseDistance = (markerPosition: IPosition, myPosition: IPosition
 
 export const calculatingDistance = (data: IFirebase[], myPosition: IPosition) => {
     //O(n);
-    //returning new array not modifying data
+    //Vraca novo polje ne radi nikakve izmjene na state-u
     return data.map((el: IFirebase) => {
         return ({ ...el, distance: preciseDistance({ longitude: el.longitude, latitude: el.latitude }, myPosition) })
     })
@@ -55,7 +55,7 @@ export const sortCalculatedDistance = (res: IFirebase[]): void => {
     })
 }
 // O(n) where n is end - start.
-//in my case worst scenario is O(3)
+//U mom najgorem slucaju to je O(3)
 export const nearestThree = (res: IFirebase[]): IFirebase[] => {
     const len = res.length > 3 ? 3 : res.length;
     return res.slice(0, len)

@@ -8,7 +8,7 @@ import { DetectorStateContext } from '../context/detector/StateContext';
 import { Actions, IState, reducer } from '../reducers/detectorReducer';
 
 interface IProps {
-    //I don't know what is the type for navigation in this case..
+    //Ne znam koji je tip navigacije u ovom slucaju...
     navigation: any;
 }
 
@@ -18,7 +18,7 @@ const Detector = ({ navigation }: IProps) => {
         allPoliceman: [], onlyThreeToShow: [], notificationModalFlag: false
     })
 
-    //this is responsible for removing the tabBar
+    //Ovo je odgovorno za uklanjanje tabbara
     useEffect(() => {
         navigation.setOptions({ tabBarVisible: !state.fullScreenFlag })
     }, [state.fullScreenFlag])
@@ -39,8 +39,7 @@ const Detector = ({ navigation }: IProps) => {
             console.log(error)
         }
     }
-    //Optimize
-    //[state.settings] because I need to update color of icon depend on settings(in useMemo second arg)
+
     const FullScreenMemo = useMemo(() =>
         <FullScreen onPress={() =>
             dispatch({ type: "setFullScreenFlag", payload: !state.fullScreenFlag })}

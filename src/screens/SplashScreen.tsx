@@ -11,7 +11,7 @@ interface IProps {
 const SplashScreen = ({ navigation }: IProps): JSX.Element => {
     
     useEffect(() => {
-        //The goal is to show image for 3 sec
+        //Cilj je prikazati sliku 3 sekunde
         setTimeout(() => {
             auth().onAuthStateChanged((user) => {
                 if(user?.email){
