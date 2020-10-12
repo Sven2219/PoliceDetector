@@ -80,8 +80,8 @@ const Login = ({ navigation }: IProps): JSX.Element => {
             dispatch({ type: "setValidatePassword", password: password, passwordValidationError: "Password is valid" });
         }
     }
-    
-    
+
+
     const showConfirmPassword = (): JSX.Element | null => {
         if (!state.loginFlag) {
             return (
@@ -110,7 +110,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
 
     }
 
-    const login = async () => {
+    const login = async (): Promise<void> => {
         try {
             await auth().signInWithEmailAndPassword(state.email, state.password);
             dispatch({ type: "clear" })
@@ -120,7 +120,7 @@ const Login = ({ navigation }: IProps): JSX.Element => {
         }
     }
 
-    const register = async () => {
+    const register = async (): Promise<void> => {
         try {
             await auth().createUserWithEmailAndPassword(state.email, state.password);
             await database().ref(`Users/${auth().currentUser?.uid}`).set({

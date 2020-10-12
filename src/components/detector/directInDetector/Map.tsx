@@ -18,7 +18,7 @@ import RenderPoliceman from '../indirectInDetector/RenderPoliceman';
 import AnimateToRegionButton from '../indirectInDetector/AnimateToRegionButton';
 
 const Map = (): JSX.Element => {
-  //d === d stand for detector
+  //d stand for detector
   //dState and dDispatch === detector state and detector dispatch
   const { dState } = useContext(DetectorStateContext);
   const { dDispatch } = useContext(DetectorDispatchContext);
@@ -90,6 +90,7 @@ const Map = (): JSX.Element => {
       console.log(error)
     }
   }
+  //indeksiro sam policajce jer ih je lakse brisat po id
   const countPoliceman = async(): Promise<void> => {
     let lastIndex: string | null = '';
     const result = await database().ref('Policeman').limitToLast(1).once('child_added')
@@ -152,7 +153,7 @@ const Map = (): JSX.Element => {
       if (data !== null && data !== undefined) {
         data = Object.values(data);
         //O(n) complexity
-        //Filtrira se jer ako korisnik obrise npr 5 policajca a ima ih 10 na 5 policajcu ce bit null
+        //Filtrira se jer ako korisnik obrise npr 5 policajca, a ima ih 10 na 5 policajcu ce bit null
         data = data.filter((el: IFirebase) => el !== null);
         dDispatch({ type: "setAllPoliceman", payload: data });
       }
