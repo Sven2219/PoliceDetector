@@ -28,7 +28,7 @@ const RenderPoliceman: Function = (): JSX.Element[] | null => {
     }
 
     const formatDifferenceInMinutes = (marker: IFirebase): string => {
-        //Nisam ljubitelj moment.js jer je ogromna biblioteka
+        //Razlog koristenja Date
         //From their documentation =>In most cases, you should not choose Moment for new projects.However there are some possible reasons you might want to keep using it
         const date1: Date = new Date(marker.date.year, marker.date.month - 1, marker.date.day, marker.date.hours, marker.date.minutes);
         const date2: Date = new Date();

@@ -24,7 +24,7 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
         setUserOptions()
     }, [])
     /*Koristim once jer su podaci potrebni samo jednom
-    once ce za razliku od on slusat-pokupit podatke-prestat slusat */
+    once ce za razliku od on prestat slusat nad tim portom */
     const setUserOptions = async (): Promise<void> => {
         try {
 
@@ -56,7 +56,7 @@ const Settings = ({ navigation }: IProps): JSX.Element => {
         }
     }
 
-    //U ovom zaslonu useMemo bi mogao uciniti vise stete nego dobrog jer kada se on koristi zauzima memoriju
+    //U ovom zaslonu useMemo bi mogao uciniti vise stete nego koristi jer kada se on koristi zauzima memoriju
     //Jer radi na nacin da pamti prethodno stanje
     return (<ScrollView>
         <View style={styles.titleContainer}>

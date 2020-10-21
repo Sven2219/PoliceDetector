@@ -8,7 +8,6 @@ import { DetectorStateContext } from '../context/detector/StateContext';
 import { Actions, IState, reducer } from '../reducers/detectorReducer';
 
 interface IProps {
-    //Ne znam koji je tip navigacije u ovom slucaju...
     navigation: any;
 }
 

@@ -77,7 +77,6 @@ const Map = (): JSX.Element => {
       ok: "YES", cancel: "NO"
     })
     findMyLocation();
-
   }
   const findMyLocation = async (): Promise<void> => {
     try {
@@ -161,7 +160,7 @@ const Map = (): JSX.Element => {
   }
 
   /*Kako ovo radi ? 
-  Prvo se prolazi kroz sve policajce (mpa metodom) i dodaje se novo svojstvo distance
+  Prvo se prolazi kroz sve policajce (map metodom) i dodaje se novo svojstvo distance
   te se onda sortira prema distance
   i na kraju uzmu se prva tri pomocu slice metode
   */
